@@ -19,6 +19,7 @@
               @keydown.enter="localCompletions.length ? onComplete(compIdx) : onChat()"
               @keydown.tab="$event.preventDefault(); onComplete()"
               @keydown.esc="$event.preventDefault(); clearComplete()"
+              @keydown.shift.esc="$event.target.blur()"
               class="mt-2 bg-green-100 slate-900 p-2"
               tabindex="0"
               x-model="chatInput"

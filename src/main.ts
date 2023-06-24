@@ -24,15 +24,16 @@ interface Message {
 
 Alpine.data('balmi', () => {
     const wordList = [
-        'foo',
-        'foobar',
-        'baz'
+        'balmi says hello',
     ];
     
     const subscriptions: Subscription[] = [];
 
     const completions$ = new BehaviorSubject(new Trie(wordList));
     const completionPrefix$ = new Subject<string>();
+    const incrementCompIdx$ = new Subject<void>();
+
+    // performs autocomplete by combining latest distinct prefix with latest completion trie
     const localCompletions$ = completionPrefix$.pipe(
         distinctUntilChanged(),
         combineLatestWith(completions$),
@@ -41,7 +42,8 @@ Alpine.data('balmi', () => {
             return completions.autocomplete(prefix);
         }),
     );
-    const incrementCompIdx$ = new Subject<void>();
+
+    // tracks the current completion index
     const compIdx$ = incrementCompIdx$.pipe(
         withLatestFrom(
             completionPrefix$.pipe(
@@ -58,8 +60,10 @@ Alpine.data('balmi', () => {
         }, 0),
     );
 
+    const initialMessage = { type: 'meta', text: `> Started ${new Date().toISOString()}` };
+
     return {
-        rows: [{ type: 'meta', text: `> Started ${new Date().toISOString()}` }] as Message[],
+        rows: [initialMessage] as Message[],
         chatInputEl() {
             return this.$refs.chatInputEl as HTMLInputElement;
         },
@@ -80,7 +84,9 @@ Alpine.data('balmi', () => {
                 return;
             }
 
+            // make sure the subject is synced to state
             completionPrefix$.next(this.chatInput);
+            // emit an increment event
             incrementCompIdx$.next();
         },
         clearComplete() {
@@ -88,10 +94,12 @@ Alpine.data('balmi', () => {
         },
 
         init() {
-            compIdx$.subscribe(compIdx => this.compIdx = compIdx);
+            subscriptions.push(compIdx$.subscribe(compIdx => this.compIdx = compIdx));
 
             completionPrefix$.next('');
-            localCompletions$.subscribe(localCompletions => this.localCompletions = localCompletions);
+            subscriptions.push(
+                localCompletions$.subscribe(localCompletions => this.localCompletions = localCompletions)
+            );
         },
         destroy() {
             while (subscriptions.length) {
