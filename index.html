@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>balmi say hello</title>
+  </head>
+  <body>
+    <div
+      class="h-screen p-8"
+    >
+      <div class="h-full bg-[cornflowerblue] m-2 pt-2">
+          <div
+            x-data="balmi"
+            class="h-[600px] overflow-y-auto w-full border border-amber-200 m-2 mt-0 bg-green-300 flex flex-col-reverse"
+          >
+            <input class="mt-2 bg-green-100 slate-900 p-2" @keydown.enter="rows.unshift({type: 'chat', text: $event.target.value}); $event.target.value = ''"/>
+            <template x-for="row in rows">
+              <div
+                x-text="row.text"
+                class="px-2"
+                :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
+            </template>
+          </div>
+        </div>
+      </div>
+      <script defer type="module" src="/src/main.ts"></script>
+  </body>
+</html>
