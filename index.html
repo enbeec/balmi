@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>balmi say hello</title>
-  </head>
-  <body class="bg-slate-300">
-    <div
-      class="h-screen p-8 pb-12"
-    >
-      <div class="h-full bg-[cornflowerblue] m-2 pt-4">
-          <div
-            x-data="balmi"
-            class="h-[600px] overflow-y-auto w-full border border-amber-200 m-4 mt-0 bg-green-300 flex flex-col-reverse"
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>balmi say hello</title>
+</head>
+<body>
+<div
+  x-data="border"
+  class="transition-colors"
+  :class="defaultBorderColor"
+  @set.window="onSet($event.detail)"
+  x-ref="border"
+>
+  <div
+    class="h-screen p-8 pb-12"
+  >
+    <div class="h-full bg-[cornflowerblue] m-2 pt-4">
+      <div
+        x-data="balmi"
+        class="h-[600px] overflow-y-auto w-full border border-amber-200 m-4 mt-0 bg-green-300 flex flex-col-reverse"
+      >
+        <input
+          @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
+          @keydown.tab.prevent="queryCompletions()"
+          @keydown.esc.prevent="clearComplete()"
+          @keydown.shift.esc="$event.target.blur()"
+          class="mt-2 bg-green-100 slate-900 p-2"
+          tabindex="0"
+          x-model="chatInput"
+          x-ref="chatInputEl"
+        />
+        <div
+          class="mt-2 px-2 bg-amber-100"
+        >
+          <template
+            x-for="(comp, idx) in completions"
           >
-            <input
-              @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
-              @keydown.tab="$event.preventDefault(); queryCompletions()"
-              @keydown.esc="$event.preventDefault(); clearComplete()"
-              @keydown.shift.esc="$event.target.blur()"
-              class="mt-2 bg-green-100 slate-900 p-2"
-              tabindex="0"
-              x-model="chatInput"
-              x-ref="chatInputEl"
-            />
-            <div
-              class="mt-2 px-2 bg-amber-100"
-            >
-              <template
-                x-for="(comp, idx) in completions"
-              >
                 <span
                   class="mx-2"
                   :class="{ 'text-cyan-950 underline': completionIndex === idx }"
                   x-text="comp"
                   tabindex="0"
                 ></span>
-              </template>
-            </div>
-            <template x-for="row in rows">
-              <div
-                x-text="row.text"
-                class="px-2"
-                :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
-            </template>
-          </div>
+          </template>
         </div>
+        <template x-for="row in rows">
+          <div
+            x-text="row.text"
+            class="px-2"
+            :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
+        </template>
       </div>
-      <script defer type="module" src="/src/main.ts"></script>
-  </body>
+    </div>
+  </div>
+</div>
+<script defer type="module" src="/src/main.ts"></script>
+</body>
 </html>
