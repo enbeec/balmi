@@ -4,7 +4,7 @@ import { PanelContext, PanelSelector, useStackedPanels } from "./stackedPanels";
 import { LayoutContext, useLayoutObserver } from "./layoutObserver";
 import { AlpineComponent } from "alpinejs";
 
-export const Layout = () => {
+export const Layout = (): AlpineComponent => {
     const { focusPanel, updatePanelPosition } = useStackedPanels();
     const { subLayout } = useLayoutObserver();
 

@@ -5,11 +5,7 @@ import {
     BreakpointSelector, 
 } from "./tailwind.helpers";
 
-enum Breakpoint { sm, md, lg, xl }
-
 const breakpoints = getBreakpointsFromConfig();
-const breakpointMap = new Map(breakpointSelectors.map((key, idx) => [key, breakpoints[idx]]));
-const breakpointIndexMap = new Map(breakpointSelectors.map((key) => [key, Breakpoint[key]]));
 
 const widthToBreakpointSelector = (w: number): BreakpointSelector => {
     let res: BreakpointSelector;
@@ -45,15 +41,3 @@ const widthToBreakpointSelector = (w: number): BreakpointSelector => {
 
 export const getBreakpoint: OperatorFunction<number, BreakpointSelector> = 
     (width$) => width$.pipe(map(widthToBreakpointSelector));
-
-export const isBreakpoint = 
-    (bps: typeof breakpointSelectors[number]): OperatorFunction<number, boolean> =>
-        (width$) => {
-            const width = breakpointMap.get(bps)!;
-            let nextWidth: number;
-            if (bps === 'xl') nextWidth = breakpoints[Breakpoint.sm];
-            else nextWidth = breakpoints[breakpointIndexMap.get(bps)! + 1];
-            return width$.pipe(
-                map(w => w >= width && w < nextWidth),
-            );
-        }
