@@ -16,7 +16,7 @@
             class="h-[600px] overflow-y-auto w-full border border-amber-200 m-4 mt-0 bg-green-300 flex flex-col-reverse"
           >
             <input
-              @keydown.enter="localCompletions.length ? onComplete(compIdx) : onChat()"
+              @keydown.enter="completions.length ? onComplete(completionIndex) : onChat()"
               @keydown.tab="$event.preventDefault(); onComplete()"
               @keydown.esc="$event.preventDefault(); clearComplete()"
               @keydown.shift.esc="$event.target.blur()"
@@ -29,11 +29,11 @@
               class="mt-2 px-2 bg-amber-100"
             >
               <template
-                x-for="(comp, idx) in localCompletions"
+                x-for="(comp, idx) in completions"
               >
                 <span
                   class="mx-2"
-                  :class="{ 'text-cyan-950 underline': compIdx === idx }"
+                  :class="{ 'text-cyan-950 underline': completionIndex === idx }"
                   x-text="comp"
                   tabindex="0"
                 ></span>
