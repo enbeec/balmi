@@ -1,0 +1,91 @@
+import { 
+    Subject, 
+    map, 
+    debounceTime, 
+    distinctUntilChanged, 
+    withLatestFrom 
+} from "rxjs";
+import { getBreakpoint } from "./breakpoints";
+import { BreakpointSelector } from "./tailwind.helpers";
+
+export class LayoutObserverError extends Error {
+    constructor(message?: string) {
+        super(message ? 'Error w/ layout observer: ' + message : 'Error with layout observer');
+    }
+}
+
+export const OBSERVER_DEBOUNCE_MS = 200;
+
+export interface LayoutContext {
+    bodyWidth: number;
+    bodyHeight: number;
+    currentBreakpoint: BreakpointSelector;
+    isSm: boolean;
+    isMd: boolean;
+    isLg: boolean;
+    isXl: boolean;
+}
+
+export const useLayoutObserver = () => {
+    const _bodyRect$: Subject<DOMRect> = new Subject();
+    const bodyRect$ = _bodyRect$.asObservable().pipe(
+        debounceTime(OBSERVER_DEBOUNCE_MS),
+        distinctUntilChanged(),
+    );
+    const bodyWidth$ = bodyRect$.pipe(map(r => r.width));
+
+    const resizeObserver = new ResizeObserver(([{contentRect}]) => {
+        _bodyRect$.next(contentRect);
+    });
+
+    // TODO: rewrite to calculate the current bp *first* then set the bools
+    const subLayout = <CTX extends LayoutContext>(ctx: CTX) => {
+        resizeObserver.observe(document.body);
+        const sub = bodyRect$.pipe(
+            withLatestFrom(bodyWidth$.pipe(
+                getBreakpoint,
+            )),
+        ).subscribe(
+            ([rect, currentBreakpoint]) => {
+                ctx.bodyWidth = rect.width;
+                ctx.bodyHeight = rect.height;
+                ctx.currentBreakpoint = currentBreakpoint;
+                switch (currentBreakpoint) {
+                    case 'sm':
+                        ctx.isXl = false;
+                        ctx.isLg = false;
+                        ctx.isMd = false;
+                        ctx.isSm = true;
+                        break;
+                    case 'md':
+                        ctx.isXl = false;
+                        ctx.isLg = false;
+                        ctx.isMd = true;
+                        ctx.isSm = false;
+                        break;
+                    case 'lg':
+                        ctx.isXl = false;
+                        ctx.isLg = true;
+                        ctx.isMd = false;
+                        ctx.isSm = false;
+                        break;
+                    case 'xl':
+                        ctx.isXl = true;
+                        ctx.isLg = false;
+                        ctx.isMd = false;
+                        ctx.isSm = false;
+                        break;
+                    default:
+                        throw new LayoutObserverError(
+                            'switching current => ' + currentBreakpoint
+                        );
+                }
+            }
+        )
+        return () => sub.unsubscribe();
+    }
+
+    return {
+        subLayout,
+    }
+}

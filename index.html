@@ -13,6 +13,7 @@
   :class="canvas"
   class="bg-slate-300"
   @panelfocus="focusPanel($event.detail)"
+  x-effect="console.debug('layout change', { currentBreakpoint, bodyWidth, bodyHeight })"
 >
   <div
     class="h-screen p-1 pb-6 md:p-6 md:pb-12"
@@ -20,13 +21,13 @@
     <div
       id="foreground"
       :class="foreground"
-      class="h-full bg-[cornflowerblue] relative"
+      class="h-full bg-[cornflowerblue] relative flex flex-col justify-between"
     >
-      <div
+      <section
         id="chat-panel"
         :class="chatPanel"
         x-data="balmi"
-        class="overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
+        class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
       >
         <input
           tabindex="0"
@@ -58,19 +59,19 @@
             class="px-2"
             :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
         </template>
-      </div>
-      <div
+      </section>
+      <section
         id="flex-panel"
         :class="flexPanel + flexPanelPosition"
-        class="bg-purple-300 mt-12 border border-amber-200 shadow shadow-amber-950"
+        class="relative bg-purple-300 border border-amber-200 shadow shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'flex')"
-      ></div>
-      <div
+      ></section>
+      <section
         id="ctrl-panel"
         :class="ctrlPanel + ctrlPanelPosition"
-        class="bg-red-300 border border-amber-200 shadow shadow-amber-950"
+        class="relative bg-red-300 border border-amber-200 shadow shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'ctrl')"
-      ></div>
+      ></section>
     </div>
   </div>
 </div>

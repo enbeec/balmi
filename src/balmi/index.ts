@@ -1,5 +1,5 @@
 import { Subscription } from "rxjs";
-import { useAutocompleter } from "./autocompleter.ts";
+import { useAutocompleter } from "./autocompleter";
 import { AlpineComponent } from "alpinejs";
 
 interface Message {
@@ -38,10 +38,7 @@ export const Balmi = (): AlpineComponent => {
     } = useAutocompleter(wordList);
 
     return {
-        rows: [
-            initialMessage,
-            ...'qwertasdfgzxcvb'.split('').map(s => ({type: 'chat', text: s}))
-        ] as Message[],
+        rows: [initialMessage] as Message[],
         chatInputEl() {
             return this.$refs.chatInputEl as HTMLInputElement;
         },

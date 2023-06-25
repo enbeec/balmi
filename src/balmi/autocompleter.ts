@@ -8,7 +8,7 @@ import {
     Subject,
     withLatestFrom
 } from "rxjs";
-import {Trie} from "./trie.ts";
+import {Trie} from "../util/trie.js";
 
 export function useAutocompleter(wordList: string[]) {
     const trie$ = new BehaviorSubject(new Trie(wordList));
