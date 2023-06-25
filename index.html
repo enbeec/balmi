@@ -7,16 +7,30 @@
   <title>balmi say hello</title>
 </head>
 <body>
-<div class="bg-slate-300 min-h-[1280px]">
-  <div class="h-screen p-6 pb-12">
-    <div class="h-full min-h-[1200px] bg-[cornflowerblue] m-2 pt-4 relative">
+<div
+  id="canvas"
+  x-data="layout"
+  :class="canvas"
+  class="bg-slate-300"
+  @panelfocus="focusPanel($event.detail)"
+>
+  <div
+    class="h-screen p-1 pb-6 md:p-6 md:pb-12"
+  >
+    <div
+      id="foreground"
+      :class="foreground"
+      class="h-full bg-[cornflowerblue] relative"
+    >
       <div
+        id="chat-panel"
+        :class="chatPanel"
         x-data="balmi"
-        class="h-[600px] overflow-y-auto w-full border border-amber-200 m-4 mt-0 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
+        class="overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
       >
         <input
           tabindex="0"
-          class="mt-2 bg-green-100 slate-900 p-2"
+          class="mt-2 bg-green-100 slate-900 p-2 h-8"
           x-model="chatInput"
           x-ref="chatInputEl"
           @keydown.esc.prevent="clearCompletions()"
@@ -25,7 +39,7 @@
           @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
         />
         <div
-          class="mt-2 px-2 bg-amber-100"
+          class="md:mt-2 px-2 bg-amber-100"
         >
           <template
             x-for="(comp, idx) in completions"
@@ -46,10 +60,16 @@
         </template>
       </div>
       <div
-        class="h-[380px] w-[1000px] bg-purple-300 mx-auto mt-12 border border-amber-200 shadow shadow-amber-950"
+        id="flex-panel"
+        :class="flexPanel + flexPanelPosition"
+        class="bg-purple-300 mt-12 border border-amber-200 shadow shadow-amber-950"
+        @click.stop.prevent="$dispatch('panelfocus', 'flex')"
       ></div>
       <div
-        class="h-[140px] w-[600px] bg-red-300 absolute bottom-[-10px] right-[-10px] border border-amber-200 shadow shadow-amber-950"
+        id="ctrl-panel"
+        :class="ctrlPanel + ctrlPanelPosition"
+        class="bg-red-300 border border-amber-200 shadow shadow-amber-950"
+        @click.stop.prevent="$dispatch('panelfocus', 'ctrl')"
       ></div>
     </div>
   </div>

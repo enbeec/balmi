@@ -38,7 +38,10 @@ export const Balmi = (): AlpineComponent => {
     } = useAutocompleter(wordList);
 
     return {
-        rows: [initialMessage] as Message[],
+        rows: [
+            initialMessage,
+            ...'qwertasdfgzxcvb'.split('').map(s => ({type: 'chat', text: s}))
+        ] as Message[],
         chatInputEl() {
             return this.$refs.chatInputEl as HTMLInputElement;
         },
