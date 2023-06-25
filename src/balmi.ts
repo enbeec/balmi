@@ -25,10 +25,7 @@ function execCommand(s: string) {
 }
 
 export const Balmi = (): AlpineComponent => {
-    const wordList = [
-        'balmi says hello',
-        '/setBg=',
-    ];
+    const wordList: string[] = [];
 
     const subscriptions: Subscription[] = [];
 

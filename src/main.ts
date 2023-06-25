@@ -1,7 +1,6 @@
 import Alpine from 'alpinejs';
 import './style.css'
 import { Balmi } from "./balmi.ts";
-import {Border} from "./border.ts";
 
 declare global {
     interface Window {
@@ -11,6 +10,5 @@ declare global {
 window.Alpine = Alpine;
 
 Alpine.data('balmi', Balmi);
-Alpine.data('border', Border);
 
 Alpine.start();

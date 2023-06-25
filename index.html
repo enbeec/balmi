@@ -7,30 +7,22 @@
   <title>balmi say hello</title>
 </head>
 <body>
-<div
-  x-data="border"
-  class="transition-colors"
-  :class="defaultBorderColor"
-  @set.window="onSet($event.detail)"
-  x-ref="border"
->
-  <div
-    class="h-screen p-8 pb-12"
-  >
-    <div class="h-full bg-[cornflowerblue] m-2 pt-4">
+<div class="bg-slate-300 min-h-[1280px]">
+  <div class="h-screen p-6 pb-12">
+    <div class="h-full min-h-[1200px] bg-[cornflowerblue] m-2 pt-4 relative">
       <div
         x-data="balmi"
-        class="h-[600px] overflow-y-auto w-full border border-amber-200 m-4 mt-0 bg-green-300 flex flex-col-reverse"
+        class="h-[600px] overflow-y-auto w-full border border-amber-200 m-4 mt-0 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
       >
         <input
-          @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
-          @keydown.tab.prevent="queryCompletions()"
-          @keydown.esc.prevent="clearComplete()"
-          @keydown.shift.esc="$event.target.blur()"
-          class="mt-2 bg-green-100 slate-900 p-2"
           tabindex="0"
+          class="mt-2 bg-green-100 slate-900 p-2"
           x-model="chatInput"
           x-ref="chatInputEl"
+          @keydown.esc.prevent="clearCompletions()"
+          @keydown.shift.esc="$event.target.blur()"
+          @keydown.tab.prevent="queryCompletions()"
+          @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
         />
         <div
           class="mt-2 px-2 bg-amber-100"
@@ -53,6 +45,12 @@
             :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
         </template>
       </div>
+      <div
+        class="h-[380px] w-[1000px] bg-purple-300 mx-auto mt-12 border border-amber-200 shadow shadow-amber-950"
+      ></div>
+      <div
+        class="h-[140px] w-[600px] bg-red-300 absolute bottom-[-10px] right-[-10px] border border-amber-200 shadow shadow-amber-950"
+      ></div>
     </div>
   </div>
 </div>
