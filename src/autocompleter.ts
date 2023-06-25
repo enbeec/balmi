@@ -52,6 +52,6 @@ export function useAutocompleter(wordList: string[]) {
             ]).subscribe(observer);
         },
         setCompletionPrefix: (prefix: string) => completionPrefix$.next(prefix),
-        completionCycle: () => incrementCompIdx$.next(),
+        cycleCompletionSelection: () => incrementCompIdx$.next(),
     }
 }

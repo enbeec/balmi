@@ -1,13 +1,5 @@
 import Alpine from 'alpinejs';
-import {
-    BehaviorSubject,
-    Subject,
-    Subscription,
-    combineLatestWith,
-    distinctUntilChanged,
-    map, withLatestFrom, scan, startWith, pairwise, combineLatest,
-} from "rxjs";
-import { Trie } from "./trie.ts";
+import { Subscription } from "rxjs";
 import './style.css'
 import {useAutocompleter} from "./autocompleter.ts";
 
@@ -27,7 +19,8 @@ interface Message {
 Alpine.data('balmi', () => {
     const wordList = [
         'balmi says hello',
-        'ding'
+        'banana',
+        'balmi is nice'
     ];
     
     const subscriptions: Subscription[] = [];
@@ -37,7 +30,7 @@ Alpine.data('balmi', () => {
     const {
         subscribe: subscribeAutocomplete,
         setCompletionPrefix,
-        completionCycle,
+        cycleCompletionSelection,
     } = useAutocompleter(wordList);
 
     return {
@@ -46,7 +39,7 @@ Alpine.data('balmi', () => {
             return this.$refs.chatInputEl as HTMLInputElement;
         },
         chatInput: '',
-        onChat() {
+        submitChat() {
             if (!this.chatInput) return;
             this.rows.unshift({type: 'chat', text: this.chatInput});
             this.chatInput = '';
@@ -54,20 +47,16 @@ Alpine.data('balmi', () => {
 
         completions: [],
         completionIndex: 0,
-        onComplete(idx?: number) {
-            if (typeof idx === 'number') {
-                this.chatInput = this.completions[idx];
-                this.clearComplete();
-                this.chatInputEl().focus();
-                return;
-            }
-
-            // make sure the subject is synced to state
+        queryCompletions() {
             setCompletionPrefix(this.chatInput);
-            // emit an increment event
-            completionCycle();
+            cycleCompletionSelection();
         },
-        clearComplete() {
+        commitCompletion(idx: number) {
+            this.chatInput = this.completions[idx];
+            this.clearCompletions();
+            this.chatInputEl().focus();
+        },
+        clearCompletions() {
             setCompletionPrefix('');
         },
 
