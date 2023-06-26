@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "alpinejs": "^3.12.2",
+    "feather-icons": "^4.29.0",
     "rxjs": "^7.8.1",
     "zod": "^3.21.4"
   }

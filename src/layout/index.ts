@@ -21,7 +21,7 @@ export const Layout = (): AlpineComponent => {
             'order-3', 'lg:order-1',
             'min-h-[400px]',
             'w-full',
-            '-m-1 -mt-24', 'md:-m-2 md:-mt-32', 'lg:-m-4', 'xl:-m-6',
+            '-m-1 -mt-24', 'md:-m-2 md:-mt-20', 'lg:-m-4', 'xl:-m-6',
         ].join(' '),
 
         flexPanelPosition: '',
@@ -29,7 +29,7 @@ export const Layout = (): AlpineComponent => {
             'order-2',
             'min-h-[320px]',
             'w-full',
-            'sm:m-1', 'md:m-2', 'lg:m-4 lg:mt-8', 'xl:m-6',
+            'sm:m-1', 'md:m-2 mb-4', 'lg:m-4 lg:mt-8', 'xl:m-6',
         ].join(' '),
 
         ctrlPanelPosition: '',

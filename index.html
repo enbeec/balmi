@@ -63,10 +63,24 @@
       </section>
       <section
         id="flex-panel"
-        :class="flexPanel + flexPanelPosition"
+        :class="flexPanel + flexPanelPosition + ` ${currentBreakpoint}`"
         class="relative bg-purple-300 border border-amber-200 shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'flex')"
-      ></section>
+        x-data="{ set: new Set() }"
+      >
+        <template x-for="(icon, index) of ['award']">
+          <div 
+            class="flex-panel-child toggle" 
+            :class="{ [currentBreakpoint]: true, active: set.has(index) }"
+            @click.stop.prevent="set.has(index) ? set.delete(index) : set.add(index)"
+          >
+            <i 
+              x-feather="icon"
+              class="mx-auto mt-1"
+            ></i>
+          </div>
+        </template>
+      </section>
       <section
         id="ctrl-panel"
         :class="ctrlPanel + ctrlPanelPosition"

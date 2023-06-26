@@ -2,23 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-#foreground {
-    display: grid;
-}
+@layer components {
+    #foreground {
+        display: grid;
+    }
 
-.sm#foreground {
-    grid-template-rows: auto 1fr 2fr;
-}
+    .sm#foreground {
+        grid-template-rows: auto 1fr 2fr;
+    }
 
-.md#foreground {
-    grid-template-rows: auto 2fr 3fr;
-}
+    .md#foreground {
+        grid-template-rows: auto 2fr 3fr;
+    }
 
-.lg#foreground {
-    grid-template-rows: 5fr 3fr auto;
-}
+    .lg#foreground {
+        grid-template-rows: 5fr 3fr auto;
+    }
 
-.xl#foreground {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: 8fr 1fr;
+    .xl#foreground {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: 8fr 1fr;
+    }
+
+    .flex-panel-child.toggle {
+        @apply transition-shadow transition-colors;
+        @apply shadow shadow-teal-950 text-teal-800 bg-amber-100;
+        @apply hover:shadow-md hover:shadow-teal-950 hover:text-teal-950 hover:border-teal-900;
+    }
+    .flex-panel-child.toggle.active {
+        @apply shadow-sm text-teal-900 bg-amber-200 border-teal-900;
+    }
+
+    #flex-panel {
+        display: grid;
+
+        grid-auto-flow: row;
+        overflow-y: scroll;
+
+        grid-auto-rows: 33%;
+        grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+
+        gap: 0.4rem;
+    }
+    .flex-panel-child {
+        @apply h-16 w-16 p-3;
+        @apply border-4 border-teal-600 rounded-full;
+    }
+    .flex-panel-child > svg {
+        height: 100%;
+        width: 100%;
+    }
+
+    #flex-panel.sm {
+        @apply p-3;
+    }
+    .flex-panel-child.sm {
+        @apply pt-3;
+    }
+
+    #flex-panel.md {
+        @apply px-2 py-2;
+    }
+    .flex-panel-child.md {
+        @apply h-16 w-16 m-auto pt-3;
+    }
+
+    #flex-panel.lg {
+        @apply px-6 py-12;
+    }
+    .flex-panel-child.lg {
+        @apply h-20 w-20 m-auto p-4;
+    }
+
+    #flex-panel.xl {
+        grid-auto-rows: 20%;
+        @apply px-8 py-2;
+    }
+    .flex-panel-child.xl {
+        @apply h-24 w-24 m-auto p-4;
+        @apply border-4;
+    }
 }
