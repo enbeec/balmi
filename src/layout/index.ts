@@ -1,8 +1,8 @@
+import { type AlpineComponent } from "alpinejs";
+import { type Simplify } from 'type-fest';
 import { Z_INDICIES } from "./tailwind.helpers";
-import { Simplify } from 'type-fest';
-import { PanelContext, PanelSelector, useStackedPanels } from "./stackedPanels";
-import { LayoutContext, useLayoutObserver } from "./layoutObserver";
-import { AlpineComponent } from "alpinejs";
+import { type PanelContext, type PanelSelector, useStackedPanels } from "./stackedPanels";
+import { type LayoutContext, useLayoutObserver } from "./layoutObserver";
 
 export const Layout = (): AlpineComponent => {
     const { focusPanel, updatePanelPosition } = useStackedPanels();

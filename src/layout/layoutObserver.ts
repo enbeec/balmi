@@ -32,17 +32,16 @@ export const useLayoutObserver = () => {
         debounceTime(OBSERVER_DEBOUNCE_MS),
         distinctUntilChanged(),
     );
-    const bodyWidth$ = bodyRect$.pipe(map(r => r.width));
 
     const resizeObserver = new ResizeObserver(([{contentRect}]) => {
         _bodyRect$.next(contentRect);
     });
 
-    // TODO: rewrite to calculate the current bp *first* then set the bools
     const subLayout = <CTX extends LayoutContext>(ctx: CTX) => {
         resizeObserver.observe(document.body);
         const sub = bodyRect$.pipe(
-            withLatestFrom(bodyWidth$.pipe(
+            withLatestFrom(bodyRect$.pipe(
+                map(r => r.width),
                 getBreakpoint,
             )),
         ).subscribe(
