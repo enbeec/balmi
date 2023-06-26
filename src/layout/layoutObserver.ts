@@ -16,7 +16,7 @@ export class LayoutObserverError extends Error {
     }
 }
 
-export const OBSERVER_DEBOUNCE_MS = 100;
+export const OBSERVER_DEBOUNCE_MS = 50;
 
 export interface LayoutContext {
     bodyWidth: number;

@@ -7,7 +7,7 @@
 }
 
 .sm#foreground {
-    grid-template-rows: auto 2fr 3fr;
+    grid-template-rows: auto 1fr 2fr;
 }
 
 .md#foreground {
