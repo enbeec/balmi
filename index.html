@@ -27,7 +27,7 @@
         id="chat-panel"
         :class="chatPanel + chatPanelPosition"
         x-data="balmi"
-        class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
+        class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'chat')"
       >
         <input
@@ -64,13 +64,13 @@
       <section
         id="flex-panel"
         :class="flexPanel + flexPanelPosition"
-        class="relative bg-purple-300 border border-amber-200 shadow shadow-amber-950"
+        class="relative bg-purple-300 border border-amber-200 shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'flex')"
       ></section>
       <section
         id="ctrl-panel"
         :class="ctrlPanel + ctrlPanelPosition"
-        class="relative bg-red-300 border border-amber-200 shadow shadow-amber-950"
+        class="relative bg-red-300 border border-amber-200 shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'ctrl')"
       ></section>
     </div>

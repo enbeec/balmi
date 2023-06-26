@@ -12,7 +12,7 @@ export const getBreakpointsFromConfig = () => {
 // storing these as strings makes sure Tailwind doesn't optimize away needed classes
 //      (note the leading spaces so we can concat them)
 export const Z_INDICIES = [
-    ' z-50', 
-    ' z-30', 
-    ' z-10', 
+    ' z-50 shadow-lg', 
+    ' z-30 shadow-md', 
+    ' z-10 shadow-sm', 
 ];
