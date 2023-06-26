@@ -68,7 +68,7 @@
         @click.stop.prevent="$dispatch('panelfocus', 'flex')"
         x-data="{ set: new Set() }"
       >
-        <template x-for="(icon, index) of ['award']">
+        <template x-for="(icon, index) of $store.feathericons.names">
           <div 
             class="flex-panel-child toggle" 
             :class="{ [currentBreakpoint]: true, active: set.has(index) }"

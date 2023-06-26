@@ -17,9 +17,11 @@ declare global {
 }
 window.Alpine = Alpine;
 
+console.log(Object.keys(icons))
+
 Alpine.data('balmi', Balmi);
 Alpine.data('layout', Layout);
-
+Alpine.store('feathericons', { names: Object.keys(icons) });
 
 Alpine.directive('feather', (el, { expression }, { evaluate }) => {
     const icon = evaluate(expression) as string;
