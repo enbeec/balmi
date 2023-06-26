@@ -8,7 +8,7 @@ import {
     animationFrameScheduler
 } from "rxjs";
 import { getBreakpoint } from "./breakpoints";
-import { BreakpointSelector, breakpointSelectors } from "./tailwind.helpers";
+import { BreakpointSelector } from "./tailwind.helpers";
 
 export class LayoutObserverError extends Error {
     constructor(message?: string) {

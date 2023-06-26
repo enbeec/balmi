@@ -8,7 +8,7 @@ import { replace, icons } from 'feather-icons';
 
 const iconKeyMap = new Map(Object.keys(icons).map(key => [key, true]));
 
-document.addEventListener('alpine:initialized', () => replace());
+document.addEventListener('alpine:initialized', replace);
 
 declare global {
     interface Window {
