@@ -16,18 +16,19 @@
   x-effect="console.debug('layout change', { currentBreakpoint, bodyWidth, bodyHeight })"
 >
   <div
-    class="h-screen p-1 pb-6 md:p-6 md:pb-12"
+    class="h-screen p-1 pb-6 md:p-6 md:pb-12 lg:p-12 lg:pb-18"
   >
     <div
       id="foreground"
-      :class="foreground"
-      class="h-full bg-[cornflowerblue] relative flex flex-col justify-between"
+      :class="foreground + ` ${currentBreakpoint}`"
+      class="h-full bg-[cornflowerblue] relative"
     >
       <section
         id="chat-panel"
-        :class="chatPanel"
+        :class="chatPanel + chatPanelPosition"
         x-data="balmi"
         class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow shadow-amber-950"
+        @click.stop.prevent="$dispatch('panelfocus', 'chat')"
       >
         <input
           tabindex="0"

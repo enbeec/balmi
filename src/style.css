@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#foreground {
+    display: grid;
+}
+
+.sm#foreground {
+    grid-template-rows: auto 2fr 3fr;
+}
+
+.md#foreground {
+    grid-template-rows: auto 2fr 3fr;
+}
+
+.lg#foreground {
+    grid-template-rows: 5fr 3fr auto;
+}
+
+.xl#foreground {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 8fr 1fr;
+}

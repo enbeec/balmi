@@ -13,9 +13,6 @@ export const getBreakpointsFromConfig = () => {
 //      (note the leading spaces so we can concat them)
 export const Z_INDICIES = [
     ' z-50', 
-    ' z-40', 
     ' z-30', 
-    ' z-20', 
     ' z-10', 
-    ' z-0'
 ];

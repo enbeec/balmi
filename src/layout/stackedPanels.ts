@@ -1,6 +1,6 @@
 import { Z_INDICIES } from "./tailwind.helpers";
 
-export type PanelSelector = 'ctrl' | 'flex';
+export type PanelSelector = 'chat' | 'ctrl' | 'flex';
 export type PanelContext = {
     chatPanelPosition: string;
     ctrlPanelPosition: string;
@@ -8,7 +8,7 @@ export type PanelContext = {
 }
 
 export const useStackedPanels = () => {
-    let panelPosition: readonly PanelSelector[] = ['ctrl', 'flex'];
+    let panelPosition: readonly PanelSelector[] = ['chat', 'ctrl', 'flex'];
     const focusPanel = (panel: PanelSelector) => {
         let _panelPosition = [...panelPosition];
         if (_panelPosition[0] === panel) return;
@@ -31,7 +31,7 @@ export const useStackedPanels = () => {
         panelPosition.forEach(
             (pp, idx) => {
                 const key = pp + 'PanelPosition' as keyof PanelContext;
-                ctx[key] = Z_INDICIES[idx]
+                ctx[key] = Z_INDICIES[idx];
             }
         );
     }

@@ -3,10 +3,12 @@ import {
     map, 
     debounceTime, 
     distinctUntilChanged, 
-    withLatestFrom 
+    withLatestFrom, 
+    observeOn,
+    animationFrameScheduler
 } from "rxjs";
 import { getBreakpoint } from "./breakpoints";
-import { BreakpointSelector } from "./tailwind.helpers";
+import { BreakpointSelector, breakpointSelectors } from "./tailwind.helpers";
 
 export class LayoutObserverError extends Error {
     constructor(message?: string) {
@@ -14,7 +16,7 @@ export class LayoutObserverError extends Error {
     }
 }
 
-export const OBSERVER_DEBOUNCE_MS = 200;
+export const OBSERVER_DEBOUNCE_MS = 100;
 
 export interface LayoutContext {
     bodyWidth: number;
@@ -29,6 +31,7 @@ export interface LayoutContext {
 export const useLayoutObserver = () => {
     const _bodyRect$: Subject<DOMRect> = new Subject();
     const bodyRect$ = _bodyRect$.asObservable().pipe(
+        observeOn(animationFrameScheduler),
         debounceTime(OBSERVER_DEBOUNCE_MS),
         distinctUntilChanged(),
     );

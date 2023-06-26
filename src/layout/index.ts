@@ -1,6 +1,5 @@
 import { type AlpineComponent } from "alpinejs";
 import { type Simplify } from 'type-fest';
-import { Z_INDICIES } from "./tailwind.helpers";
 import { type PanelContext, type PanelSelector, useStackedPanels } from "./stackedPanels";
 import { type LayoutContext, useLayoutObserver } from "./layoutObserver";
 
@@ -8,34 +7,45 @@ export const Layout = (): AlpineComponent => {
     const { focusPanel, updatePanelPosition } = useStackedPanels();
     const { subLayout } = useLayoutObserver();
 
+
     return {
         canvas: [
             'min-h-[680px]',
-            'lg:min-h-[1280px]',
         ].join(' '),
         foreground: [
-            'min-h-[600px]',
-            'm-2',
-            'lg:min-h-[1200px]',
+            'min-h-[600px]', 'm-2',
         ].join(' '),
-        // always on top
-        chatPanelPosition: Z_INDICIES[Z_INDICIES.length - 1],
+
+        chatPanelPosition: '',
         chatPanel: [
-            'h-[300px]', 'max-h-[400px]',
-            // 'md:h-[600px]', 'md:w-full',
+            'order-3', 'lg:order-1',
+            'min-h-[400px]',
+            'w-full',
+            'lg:-m-4', 'xl:-m-6',
         ].join(' '),
+
         flexPanelPosition: '',
         flexPanel: [
-            'h-[240px]', 'w-full',
+            'order-2',
+            'min-h-[400px]',
+            'w-full',
+            'lg:m-4 lg:mt-8', 'xl:m-6',
         ].join(' '),
+
         ctrlPanelPosition: '',
         ctrlPanel: [
-            'h-[80px]', 'w-full',
+            'order-1', 'lg:order-3',
+            'lg:self-end',
+            'xl:w-[200%]',
+            'xl:row-end-4',
+            'h-[80px]', 'xl:h-[160px]',
+            'w-full',
         ].join(' '),
         focusPanel(panel: PanelSelector) {
             focusPanel(panel);
             updatePanelPosition(this);
         },
+
         bodyWidth: -1,
         bodyHeight: -1,
         isSm: false,
