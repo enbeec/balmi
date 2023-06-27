@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
 import './style.css'
-import { Balmi } from "./balmi";
+import { Chat } from "./chat";
 import { Layout } from './layout';
 
 // @ts-ignore
@@ -19,7 +19,7 @@ window.Alpine = Alpine;
 
 console.log(Object.keys(icons))
 
-Alpine.data('balmi', Balmi);
+Alpine.data('chat', Chat);
 Alpine.data('layout', Layout);
 Alpine.store('feathericons', { names: Object.keys(icons) });
 

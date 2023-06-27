@@ -30,9 +30,9 @@
       class="h-full bg-[cornflowerblue] relative"
     >
       <section
+        x-data="chat"
         id="chat-panel"
         :class="chatPanel + chatPanelPosition"
-        x-data="balmi"
         class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow-amber-950"
         @click.stop.prevent="$dispatch('panelfocus', 'chat')"
       >
