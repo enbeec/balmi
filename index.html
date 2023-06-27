@@ -5,8 +5,14 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>balmi say hello</title>
+  <style>
+    body {
+      /* hide until Tailwind is loaded */
+      visibility: hidden;
+    }
+  </style>
 </head>
-<body>
+<body class="visible">
 <div
   id="canvas"
   x-data="layout"
