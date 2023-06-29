@@ -1,0 +1,8 @@
+<section
+    id="flex-panel"
+    :class="flexPanel + flexPanelPosition + ` ${currentBreakpoint}`"
+    class="relative bg-purple-300 border border-amber-200 shadow-amber-950"
+    @click.stop.prevent="$dispatch('panelfocus', 'flex')"
+    x-data="{ set: new Set() }"
+>
+</section>

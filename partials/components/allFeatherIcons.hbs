@@ -1,0 +1,12 @@
+<template x-for="(icon, index) of $store.feathericons.names">
+    <div 
+        class="flex-panel-child toggle" 
+        :class="{ [currentBreakpoint]: true, active: set.has(index) }"
+        @click.stop.prevent="set.has(index) ? set.delete(index) : set.add(index)"
+    >
+        <i 
+            x-feather="icon"
+            class="mx-auto mt-1"
+        ></i>
+    </div>
+</template>

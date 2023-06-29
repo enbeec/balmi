@@ -1,0 +1,6 @@
+<section
+    id="ctrl-panel"
+    :class="ctrlPanel + ctrlPanelPosition"
+    class="relative bg-red-300 border border-amber-200 shadow-amber-950"
+    @click.stop.prevent="$dispatch('panelfocus', 'ctrl')"
+></section>
