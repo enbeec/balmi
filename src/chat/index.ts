@@ -1,6 +1,7 @@
 import { Subscription } from "rxjs";
 import { useAutocompleter } from "./autocompleter";
 import { AlpineComponent } from "alpinejs";
+import { StateStore } from "../state";
 
 interface Message {
     type: 'chat' | 'meta';
@@ -35,6 +36,7 @@ export const Chat = (): AlpineComponent => {
         subscribe: subscribeAutocomplete,
         setCompletionPrefix,
         cycleCompletionSelection,
+        trie$,
     } = useAutocompleter(wordList);
 
     return {
@@ -72,6 +74,15 @@ export const Chat = (): AlpineComponent => {
                     this.completions = completions;
                     this.completionIndex = completionIndex;
                 }));
+            // store root autocompleter trie
+            subscriptions.push(trie$.subscribe(
+                (
+                    // TODO: figure out how to extract this type (XDataContext from Alpine)
+                    (this.$store as { [stateKey: string]: any})
+                        // TODO: generic wrapper for $store that lets you specify what you're accessing
+                        .state as StateStore
+                ).rootTrie$
+            ));
         },
         destroy() {
             while (subscriptions.length) {

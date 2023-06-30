@@ -3,8 +3,7 @@ import './style.css'
 import { Chat } from "./chat";
 import { Layout } from './layout';
 import { init as initFeather } from './util/feather';
-
-initFeather(Alpine);
+import { init as initState } from './state';
 
 declare global {
     interface Window {
@@ -12,6 +11,9 @@ declare global {
     }
 }
 window.Alpine = Alpine;
+
+initFeather(Alpine);
+initState(Alpine);
 
 Alpine.data('chat', Chat);
 Alpine.data('layout', Layout);

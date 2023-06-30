@@ -8,7 +8,7 @@ import {
     Subject,
     withLatestFrom
 } from "rxjs";
-import {Trie} from "../util/trie.js";
+import { Trie } from "../util/trie.js";
 
 export function useAutocompleter(wordList: string[]) {
     const trie$ = new BehaviorSubject(new Trie(wordList));
@@ -53,5 +53,6 @@ export function useAutocompleter(wordList: string[]) {
         },
         setCompletionPrefix: (prefix: string) => completionPrefix$.next(prefix),
         cycleCompletionSelection: () => incrementCompIdx$.next(),
+        trie$: trie$.asObservable(),
     }
 }
