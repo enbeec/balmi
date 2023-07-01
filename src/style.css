@@ -24,11 +24,13 @@
         grid-template-rows: 8fr 1fr;
     }
 
-    .flex-panel-child.toggle {
+    /* STYLES FOR FEATHER ICON GRID */
+    /* .flex-panel-child.toggle {
         @apply transition-shadow transition-colors;
         @apply shadow shadow-teal-950 text-teal-800 bg-amber-100;
-        @apply hover:shadow-md hover:shadow-teal-950 hover:text-teal-950 hover:border-teal-900;
+        @apply hover: shadow-md hover:shadow-teal-950 hover:text-teal-950 hover:border-teal-900;
     }
+
     .flex-panel-child.toggle.active {
         @apply shadow-sm text-teal-900 bg-amber-200 border-teal-900;
     }
@@ -44,11 +46,13 @@
 
         gap: 0.4rem;
     }
+
     .flex-panel-child {
         @apply h-16 w-16 p-3;
         @apply border-4 border-teal-600 rounded-full;
     }
-    .flex-panel-child > svg {
+
+    .flex-panel-child>svg {
         height: 100%;
         width: 100%;
     }
@@ -56,6 +60,7 @@
     #flex-panel.sm {
         @apply p-3;
     }
+
     .flex-panel-child.sm {
         @apply pt-3;
     }
@@ -63,6 +68,7 @@
     #flex-panel.md {
         @apply px-2 py-2;
     }
+
     .flex-panel-child.md {
         @apply h-16 w-16 m-auto pt-3;
     }
@@ -70,6 +76,7 @@
     #flex-panel.lg {
         @apply px-6 py-12;
     }
+
     .flex-panel-child.lg {
         @apply h-20 w-20 m-auto p-4;
     }
@@ -78,8 +85,9 @@
         grid-auto-rows: 20%;
         @apply px-8 py-2;
     }
+
     .flex-panel-child.xl {
         @apply h-24 w-24 m-auto p-4;
         @apply border-4;
-    }
+    } */
 }

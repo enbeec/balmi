@@ -1,8 +1,19 @@
 <section
     id="flex-panel"
     :class="flexPanel + flexPanelPosition + ` ${currentBreakpoint}`"
-    class="relative bg-purple-300 border border-amber-200 shadow-amber-950"
+    class="relative bg-purple-300 border border-amber-200 shadow-amber-950 flex flex-col"
     @click.stop.prevent="$dispatch('panelfocus', 'flex')"
-    x-data="{ set: new Set() }"
+    x-data="{ tabs: ['Autocomplete'], activeIdx: 0 }"
 >
+    <div 
+        class="w-full text-violet-100 bg-black self-end flex flex-row-reverse space-x-2 select-none px-2 py-1"
+    >
+        <template x-for="(tab, tabIdx) of tabs">
+            <div 
+                x-text="tab" 
+                :class="activeIdx === tabIdx ? 'font-bold underline' : 'cursor-pointer'"
+                class="bg-gray-700 px-2 py-1 rounded-sm" 
+            ></div>
+        </template>
+    </div>
 </section>

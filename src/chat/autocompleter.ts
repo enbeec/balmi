@@ -42,14 +42,14 @@ export function useAutocompleter(wordList: string[]) {
         }, 0),
     );
 
-    type CompletionsObserver = (args: [string[], number]) => void;
+    type CompletionsObserver = (args: [[string[], number], Trie]) => void;
 
     return {
         subscribe: (observer: CompletionsObserver) => {
             return combineLatest([
                 completions$,
                 completionIndex$
-            ]).subscribe(observer);
+            ]).pipe(withLatestFrom(trie$)).subscribe(observer);
         },
         setCompletionPrefix: (prefix: string) => completionPrefix$.next(prefix),
         cycleCompletionSelection: () => incrementCompIdx$.next(),

@@ -22,6 +22,7 @@
     "alpinejs": "^3.12.2",
     "feather-icons": "^4.29.0",
     "rxjs": "^7.8.1",
+    "treant-js": "^1.0.1",
     "vite-plugin-handlebars": "^1.6.0",
     "zod": "^3.21.4"
   }

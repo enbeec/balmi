@@ -13,6 +13,18 @@ class TrieNode {
     }
 }
 
+type TreantNodeStructure = {
+    text: { name: string },
+    children: TreantNodeStructure[],
+}
+
+function toTreant(n: TrieNode): TreantNodeStructure {
+    return {
+        text: { name: n.data },
+        children: Array.from(n.children.values()).map(toTreant),
+    }
+}
+
 export class Trie {
     private root: TrieNode;
 
@@ -60,5 +72,9 @@ export class Trie {
                     res,
                     prefix + node.data
                 );
+    }
+
+    public toTreant() {
+        return toTreant(this.root);
     }
 }
