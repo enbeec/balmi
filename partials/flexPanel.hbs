@@ -16,4 +16,10 @@
             ></div>
         </template>
     </div>
+    <template x-if="!!$store.state.rootTrie">
+        <div 
+            id="root-trie"
+            style="width: 100%; height: 100%;"
+        ></div>
+    </template>
 </section>

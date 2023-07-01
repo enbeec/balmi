@@ -1,7 +1,5 @@
 // source: https://www.lavivienpost.com/autocomplete-with-trie-code/
 
-import { TreantNodeStructure } from "./treant";
-
 class TrieNode {
     data: string;
     isEnd: boolean;
@@ -62,16 +60,5 @@ export class Trie {
                     res,
                     prefix + node.data
                 );
-    }
-
-    public toTreant() {
-        return toTreant(this.root);
-    }
-}
-
-function toTreant(n: TrieNode): TreantNodeStructure {
-    return {
-        text: { name: n.data },
-        children: Array.from(n.children.values()).map(toTreant),
     }
 }
