@@ -9,6 +9,7 @@ import {
 } from "rxjs";
 import { getBreakpoint } from "./breakpoints";
 import { BreakpointSelector } from "./tailwind.helpers";
+import { AlpineComponent } from "alpinejs";
 
 export class LayoutObserverError extends Error {
     constructor(message?: string) {
@@ -45,7 +46,7 @@ export const useLayoutObserver = () => {
         _bodyRect$.next(contentRect);
     });
 
-    const subLayout = <CTX extends LayoutContext>(ctx: CTX) => {
+    const subLayout = <CTX extends LayoutContext & AlpineComponent>(ctx: CTX) => {
         resizeObserver.observe(document.body);
         const sub = bodyRect$.pipe(
             withLatestFrom(bodyRect$.pipe(
