@@ -1,12 +1,12 @@
 import { type AlpineComponent } from "alpinejs";
 import { type Simplify } from 'type-fest';
 import { type PanelContext, type PanelSelector, useStackedPanels } from "./stackedPanels";
-import { type LayoutContext, useLayoutObserver } from "./layoutObserver";
+import { type LayoutContext, useLayoutObserver, RectContext, useResizeObserver } from "./layoutObserver";
+import { type Subscription } from "rxjs";
 
 export const Layout = (): AlpineComponent => {
     const { focusPanel, updatePanelPosition } = useStackedPanels();
     const { subLayout } = useLayoutObserver();
-
 
     return {
         canvas: [
@@ -62,4 +62,18 @@ export const Layout = (): AlpineComponent => {
         },
         destroy() {},
     } satisfies Simplify<LayoutContext & PanelContext & AlpineComponent>;
+}
+
+export const Sizer = (): AlpineComponent => {
+    const { subSize } = useResizeObserver();
+
+    return {
+        rectHeight: -1,
+        rectWidth: -1,
+        subscription: null as null | Subscription,
+        init() {
+            this.destroy = subSize(this, this.$el);
+        },
+        destroy() {}
+    } satisfies Simplify<RectContext & AlpineComponent>;
 }

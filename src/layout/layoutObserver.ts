@@ -18,6 +18,11 @@ export class LayoutObserverError extends Error {
 
 export const OBSERVER_DEBOUNCE_MS = 50;
 
+export interface RectContext {
+    rectWidth: number;
+    rectHeight: number;
+}
+
 export interface LayoutContext {
     bodyWidth: number;
     bodyHeight: number;
@@ -51,6 +56,7 @@ export const useLayoutObserver = () => {
             ([rect, currentBreakpoint]) => {
                 ctx.bodyWidth = rect.width;
                 ctx.bodyHeight = rect.height;
+
                 ctx.currentBreakpoint = currentBreakpoint;
                 switch (currentBreakpoint) {
                     case 'sm':
@@ -89,5 +95,29 @@ export const useLayoutObserver = () => {
 
     return {
         subLayout,
+    }
+}
+
+export const useResizeObserver = () => {
+    const _rect$ = new Subject<DOMRect>();
+    const rect$ = _rect$.asObservable().pipe(
+        observeOn(animationFrameScheduler),
+        debounceTime(OBSERVER_DEBOUNCE_MS),
+        distinctUntilChanged(),
+    );
+
+    const resizeObserver = new ResizeObserver(([{contentRect}]) => {
+        _rect$.next(contentRect)
+    });
+
+    return {
+        subSize<CTX extends RectContext>(ctx: CTX, el: HTMLElement) {
+            resizeObserver.observe(el);
+            const sub = rect$.subscribe(({height, width}) => {
+                ctx.rectHeight = height;
+                ctx.rectWidth = width;
+            });
+            return () => sub.unsubscribe();
+        }
     }
 }
