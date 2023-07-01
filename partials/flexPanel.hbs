@@ -11,8 +11,8 @@
         <template x-for="(tab, tabIdx) of tabs">
             <div 
                 x-text="tab" 
-                :class="activeIdx === tabIdx ? 'font-bold underline' : 'cursor-pointer'"
-                class="bg-gray-700 px-2 py-1 rounded-sm" 
+                :class="activeIdx === tabIdx ? 'font-bold underline bg-gray-700 rounded-sm' : 'cursor-pointer'"
+                class="px-2 py-1" 
             ></div>
         </template>
     </div>
