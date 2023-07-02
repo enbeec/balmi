@@ -9,12 +9,6 @@ interface HierarchyDatum {
     children?: HierarchyDatum | HierarchyDatum[];
 }
 
-const serializeTrie = (n: TrieNode): any => ({
-        name: n.name,
-        isEnd: n.isEnd,
-        children: Array.from(n.children.values()).map(serializeTrie),
-    });
-
 function fromTrie(n: TrieNode) {
     const toDatum = (n: TrieNode): HierarchyDatum => {
         return {
