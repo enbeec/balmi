@@ -61,14 +61,14 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             const svg = create('svg')
                 .attr('font-family', 'sans-serif')
                 .attr('font-size', 16)
-                .attr('style', `min-height: 100%; width: 100%; max-width: 100%;`)
+                .attr('style', `height: 100%; width: 100%;`)
                 .attr('id', this._svgId)
                 .attr('height', height).attr('width', width)
                 .call(zoom);
 
             this.$el.replaceChildren(svg.node() as Node);
         },
-        drawSVG([h,w]: [number, number], data: HierarchyDatum) {
+        drawSVG([_,w]: [number, number], data: HierarchyDatum) {
             // see: https://observablehq.com/@d3/tree
             const curve = curveBumpX;
 
@@ -86,12 +86,12 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             const r = 12;
             const padding = 1;
 
+            // prepare data
             const root = hierarchy(data);
             root.sort((a,b) => a.data.name.localeCompare(b.data.name));
             const label = root.descendants().map(d => d.data.name);
 
-            // START layout calulation
-            // TODO: make this reusable and idempotent (for the resize handler)
+            // calulate layout
             const dx = 30;
             const dy = w / (root.height + padding);
             tree<HierarchyDatum>().nodeSize([dx, dy])(root);
@@ -102,15 +102,12 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 if (d.x > x1) x1 = d.x;
                 if (d.x < x0) x0 = d.x;
             });
-
+            const h = x1 - x0 + dx * 2;
             const viewbox = [-dy * padding / 2, x0 - dx, w, h];
-            // END layout calculatio
-
+            
+            // render data
             const svg = select(this._svg).attr("viewBox", viewbox)
-
             svg.selectAll('*').remove();
-
-            // TODO: rewrite this to be idempotent
             svg.append("g")
                 .attr("fill", "none")
                 .attr("stroke", stroke)
@@ -133,24 +130,27 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
 
             node.append("circle")
                 .attr("fill", d => d.children ? stroke : fill)
-                .attr("r", d => d.data.name === ' ' || !d.depth ? 5 : r);
+                .attr("r", d => !d.depth
+                    ? 1
+                    : d.data.name === ' '
+                        ? 5
+                        : r
+                );
 
             node.append("text")
                 .attr("dy", "0.5em")
                 .attr("x", d => d.children ? -6 : 6)
-                .attr("text-anchor", d => d.children ? "end" : "start")
+                .attr("text-anchor", 'start')
                 .attr("paint-order", "stroke")
                 .attr("stroke", halo)
                 .attr("stroke-width", haloWidth)
-                .text((d, i) => label[i]);
+                .text((_, i) => label[i]);
         },
         subscribe() {
             this.subscription = dimensions$.pipe(
                 combineLatestWith(dataSource.pipe(
                     map(trie => ({ ...trie.root })),
-                    tap(console.info),
                     map(fromTrie),
-                    tap(console.info),
                 )),
             ).subscribe(
                 ([dimensions, data]) => this.drawSVG(dimensions, data)
