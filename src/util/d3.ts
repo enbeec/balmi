@@ -116,14 +116,16 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 .selectAll("path")
                 .data(root.links())
                 .join("path")
-                // @ts-ignore
-                .attr("d", link(curve).x(d => d.y).y(d => d.x));
+                .attr(
+                    "d", 
+                    // @ts-ignore not even sure why this is borked in @types/d3
+                    link(curve).x(d => d.y).y(d => d.x)
+                );
 
             const node = svg.append("g")
                 .selectAll("a")
                 .data(root.descendants())
                 .join("a")
-                // @ts-ignore
                 .attr("transform", (d) => `translate(${d.y},${d.x})`);
 
             node.append("circle")
