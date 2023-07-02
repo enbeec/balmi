@@ -2,7 +2,7 @@ import { create, curveBumpX, link, select, zoom } from 'd3';
 import { HierarchyPointNode, hierarchy, tree } from 'd3-hierarchy';
 import { TrieNode, Trie } from "./trie";
 import { type AlpineComponent } from 'alpinejs';
-import { Observable, Subject, combineLatestWith, distinctUntilChanged, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, ObservedValueOf, Subject, combineLatest, combineLatestWith, distinctUntilChanged, map, tap } from 'rxjs';
 
 interface HierarchyDatum {
     name: string;
@@ -34,6 +34,29 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             (a, b) => a[0] === b[0] && a[1] === b[1]
         ),
     );
+
+    const svgProps$ = new BehaviorSubject({
+            curve: curveBumpX,
+
+            fill: '#999',
+
+            halo: '#fff',
+            haloWidth: 3,
+
+            stroke: '#555',
+            strokeWidth: 3,
+            strokeOpacity: 1,
+            strokeLinecap: '',
+            strokeLinejoin: '',
+
+            r: 12,
+            padding: 1,
+    });
+
+    type SVGProps = ObservedValueOf<typeof svgProps$>;
+
+    // not technically correct but good enough for our purposes
+    type Viewbox = [number, number, number, number];
 
     return {
         // PUBLIC INTERFACE
@@ -68,44 +91,19 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
 
             this.$el.replaceChildren(svg.node() as Node);
         },
-        drawSVG([_,w]: [number, number], data: HierarchyDatum) {
+        drawSVG(
+            {
+                strokeLinecap, strokeOpacity, strokeWidth, strokeLinejoin,
+                fill, stroke, r, curve,
+                halo, haloWidth,
+
+            }: SVGProps,
+            viewbox: Viewbox,
+            root: HierarchyPointNode<HierarchyDatum>
+        ) {
             // see: https://observablehq.com/@d3/tree
-            const curve = curveBumpX;
-
-            const fill = '#999';
-
-            const halo = '#fff';
-            const haloWidth = 3;
-
-            const stroke = '#555';
-            const strokeWidth = 3;
-            const strokeOpacity = 1;
-            const strokeLinecap = '';
-            const strokeLinejoin = '';
-
-            const r = 12;
-            const padding = 1;
-
-            // prepare data
-            const root = hierarchy(data);
-            root.sort((a,b) => a.data.name.localeCompare(b.data.name));
-            const label = root.descendants().map(d => d.data.name);
-
-            // calulate layout
-            const dx = 30;
-            const dy = w / (root.height + padding);
-            tree<HierarchyDatum>().nodeSize([dx, dy])(root);
-
-            let x0 = Infinity;
-            let x1 = -x0;
-            (root as HierarchyPointNode<HierarchyDatum>).each(d => {
-                if (d.x > x1) x1 = d.x;
-                if (d.x < x0) x0 = d.x;
-            });
-            const h = x1 - x0 + dx * 2;
-            const viewbox = [-dy * padding / 2, x0 - dx, w, h];
-            
             // render data
+            const label = root.descendants().map(d => d.data.name);
             const svg = select(this._svg).attr("viewBox", viewbox)
             svg.selectAll('*').remove();
             svg.append("g")
@@ -147,14 +145,39 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 .text((_, i) => label[i]);
         },
         subscribe() {
-            this.subscription = dimensions$.pipe(
-                combineLatestWith(dataSource.pipe(
+            this.subscription = combineLatest([
+                dimensions$,
+                svgProps$.asObservable(),
+                dataSource.pipe(
                     map(trie => ({ ...trie.root })),
                     map(fromTrie),
-                )),
-            ).subscribe(
-                ([dimensions, data]) => this.drawSVG(dimensions, data)
-            );
+                )
+            ])
+                .pipe(
+                    map(([dimensions, props, data]) => {
+                        // prepare data
+                        const root = hierarchy(data);
+                        root.sort((a,b) => a.data.name.localeCompare(b.data.name));
+
+                        // calculate viewbox
+                        const dx = 30;
+                        const dy = dimensions[1] / (root.height + props.padding);
+                        tree<HierarchyDatum>().nodeSize([dx, dy])(root);
+
+                        let x0 = Infinity;
+                        let x1 = -x0;
+                        (root as HierarchyPointNode<HierarchyDatum>).each(d => {
+                            if (d.x > x1) x1 = d.x;
+                            if (d.x < x0) x0 = d.x;
+                        });
+                        const h = x1 - x0 + dx * 2;
+                        const viewbox = [-dy * props.padding / 2, x0 - dx, dimensions[1], h];
+                        return [props, viewbox, root]
+                    })
+                )
+                .subscribe(
+                    (args) => this.drawSVG(...args)
+                );
             _dimensions$.next([height, width]);
         },
         unsubscribe() {
