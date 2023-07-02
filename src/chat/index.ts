@@ -32,6 +32,9 @@ export const Chat = (): AlpineComponent => {
         'balmi is happy',
         'balmi is quiet',
         'balmi is not sad',
+
+        'avatar',
+        'avatar greet',
     ];
 
     const subscriptions: Subscription[] = [];

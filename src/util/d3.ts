@@ -8,9 +8,12 @@ import {
     ObservedValueOf, 
     Subject, 
     combineLatest, 
+    debounceTime, 
     distinctUntilChanged, 
-    map 
+    map, 
+    tap
 } from 'rxjs';
+import { BreakpointSelector, breakpointSelectors } from '../layout/tailwind.helpers';
 
 interface HierarchyDatum {
     name: string;
@@ -43,6 +46,38 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         ),
     );
 
+    const responsiveProps = {
+        sm: {
+            dx: 50,
+            dyOffset: 0,
+            fontSize: 16,
+            r: 12,
+            padding: 1,
+        },
+        md: {
+            dx: 50,
+            dyOffset: 0,
+            fontSize: 16,
+            r: 12,
+            padding: 1,
+        },
+        lg: {
+            dx: 50,
+            dyOffset: 14,
+            // TODO: translate left
+            fontSize: 28,
+            r: 18,
+            padding: 2,
+        },
+        xl: {
+            dx: 50,
+            dyOffset: -2,
+            fontSize: 36,
+            r: 24,
+            padding: 3,
+        },
+    } satisfies Record<BreakpointSelector, Record<'dx' | 'dyOffset' | 'r' | 'fontSize' | 'padding', number>>;
+
     // TODO: adjust with breakpoint (xl needs a big boost)
     const svgProps$ = new BehaviorSubject({
         curve: curveBumpX,
@@ -58,8 +93,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         strokeLinecap: '',
         strokeLinejoin: '',
 
-        r: 12,
-        padding: 1,
+        ...responsiveProps.sm,
     });
 
     type SVGProps = ObservedValueOf<typeof svgProps$>;
@@ -69,9 +103,10 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
 
     return {
         // PUBLIC INTERFACE
-        resize(h: number, w: number) {
+        resize(h: number, w: number, bp: BreakpointSelector) {
             _dimensions$.next([h, w]);
             select(this._svg).attr('height', h).attr('width', w);
+            svgProps$.next({ ...svgProps$.value, ...responsiveProps[bp] });
         },
 
         // LIFECYCLE
@@ -91,7 +126,6 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         setupSVG() {
             const svg = create('svg')
                 .attr('font-family', 'monospace')
-                .attr('font-size', 16) // TODO: move into props
                 .attr('transform-origin', 'center')
                 .attr('style', `height: 100%; width: 100%; overflow: clip;`)
                 .attr('id', this._svgId)
@@ -102,7 +136,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         drawSVG(
             {
                 strokeLinecap, strokeOpacity, strokeWidth, strokeLinejoin,
-                stroke, r, curve,
+                stroke, r, curve, fontSize,
                 halo, haloWidth,
 
             }: SVGProps,
@@ -112,7 +146,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             // see: https://observablehq.com/@d3/tree
             // render data
             const label = root.descendants().map(d => d.data.name);
-            const svg = select(this._svg).attr("viewBox", viewbox)
+            const svg = select(this._svg).attr("viewBox", viewbox).attr('font-size', fontSize)
             svg.selectAll('*').remove();
             svg.append("g")
                 .attr("fill", "none")
@@ -166,15 +200,16 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 )
             ])
                 .pipe(
+                    debounceTime(50),
                     map(([[_, w], props, data]) => {
                         // prepare data
                         const root = hierarchy(data);
                         root.sort((a,b) => a.data.name.localeCompare(b.data.name));
 
                         // calculate viewbox
-                        const dx = 50; // TODO: move into props
+                        const dx = props.dx;
                         const dy = w / (root.height + props.padding);
-                        tree<HierarchyDatum>().nodeSize([dx, dy])(root);
+                        tree<HierarchyDatum>().nodeSize([dx, dy + props.dyOffset])(root);
 
                         let x0 = Infinity;
                         let x1 = -x0;
@@ -185,22 +220,9 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                         const h = x1 - x0 + dx * 2;
                         const viewbox = [-dy * props.padding / 2, x0 - dx, w, h];
 
-                        // setup zoom (it's not great)
-                        // select(this._svg).call(
-                        //     zoom()
-                        //         .on('zoom', (e) => {
-                        //             select(this._svg).attr('transform', e.transform);
-                        //         })
-                        //         .scaleExtent([1, 2])
-                        //         .translateExtent([
-                        //             viewbox.slice(0, 2) as [number, number],
-                        //             [w, h]
-                        //         ])
-                        // );
-
-                        // return
                         return [props, viewbox, root]
-                    })
+                    }),
+                    tap(([props, viewbox, root]) => console.debug({ name: 'draw d3tree svg', props, viewbox, root }))
                 )
                 .subscribe(
                     (args) => this.drawSVG(...args)
