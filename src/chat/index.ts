@@ -1,8 +1,6 @@
-import { Subscription } from "rxjs";
+import { type AlpineComponent } from "alpinejs";
+import { type Subscription } from "rxjs";
 import { useAutocompleter } from "./autocompleter";
-import { AlpineComponent } from "alpinejs";
-import { StateStore } from "../state";
-import { $store } from "../util/alpine";
 
 interface Message {
     type: 'chat' | 'meta';
@@ -27,7 +25,19 @@ function execCommand(s: string) {
 }
 
 export const Chat = (): AlpineComponent => {
-    const wordList: string[] = [];
+    const wordList: string[] = [
+        'balmi',
+        'balmain',
+        'boop',
+        'kai',
+        'val',
+
+        'balmi says hello',
+        'balmi is happy',
+        'balmi is quiet',
+        'balmi can not read',
+        'balmi is not sad'
+    ];
 
     const subscriptions: Subscription[] = [];
 
@@ -69,16 +79,13 @@ export const Chat = (): AlpineComponent => {
             setCompletionPrefix('');
         },
 
+        rootTrie$: trie$,
         init() {
             subscriptions.push(subscribeAutocomplete(
                 ([[completions, completionIndex]]) => {
                     this.completions = completions;
                     this.completionIndex = completionIndex;
                 }));
-            // store root autocompleter trie
-            subscriptions.push(trie$.subscribe(
-                $store<StateStore, 'state'>(this).state.rootTrie$
-            ));
         },
         destroy() {
             while (subscriptions.length) {

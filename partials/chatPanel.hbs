@@ -4,6 +4,7 @@
     :class="chatPanel + chatPanelPosition"
     class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow-amber-950"
     @click.stop.prevent="$dispatch('panelfocus', 'chat')"
+    x-effect="$store.rootTrie$ = rootTrie$"
 >
 <input
     tabindex="0"

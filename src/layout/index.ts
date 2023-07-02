@@ -27,7 +27,7 @@ export const Layout = (): AlpineComponent => {
         flexPanelPosition: '',
         flexPanel: [
             'order-2',
-            'min-h-[320px]',
+            'min-h-[420px]',
             'w-full',
             'sm:m-1', 'md:m-2 mb-4', 'lg:m-4 lg:mt-8', 'xl:m-6',
         ].join(' '),
