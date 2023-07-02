@@ -43,22 +43,23 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         ),
     );
 
+    // TODO: adjust with breakpoint
     const svgProps$ = new BehaviorSubject({
-            curve: curveBumpX,
+        curve: curveBumpX,
 
-            fill: '#999',
+        fill: '#999',
 
-            halo: '#fff',
-            haloWidth: 3,
+        halo: '#fff',
+        haloWidth: 1,
 
-            stroke: '#555',
-            strokeWidth: 3,
-            strokeOpacity: 1,
-            strokeLinecap: '',
-            strokeLinejoin: '',
+        stroke: '#555',
+        strokeWidth: 3,
+        strokeOpacity: 1,
+        strokeLinecap: '',
+        strokeLinejoin: '',
 
-            r: 12,
-            padding: 1,
+        r: 12,
+        padding: 1,
     });
 
     type SVGProps = ObservedValueOf<typeof svgProps$>;
@@ -70,8 +71,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         // PUBLIC INTERFACE
         resize(h: number, w: number) {
             _dimensions$.next([h, w]);
-            select(this._svg)
-                .attr('height', h).attr('width', w);
+            select(this._svg).attr('height', h).attr('width', w);
         },
 
         // LIFECYCLE
@@ -90,12 +90,12 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         // private interface
         setupSVG() {
             const svg = create('svg')
-                .attr('font-family', 'sans-serif')
-                .attr('font-size', 16)
-                .attr('style', `height: 100%; width: 100%;`)
+                .attr('font-family', 'monospace')
+                .attr('font-size', 16) // TODO: move into props
+                .attr('transform-origin', 'center')
+                .attr('style', `height: 100%; width: 100%; overflow: clip;`)
                 .attr('id', this._svgId)
-                .attr('height', height).attr('width', width)
-                .call(zoom);
+                .attr('height', height).attr('width', width);
 
             this.$el.replaceChildren(svg.node() as Node);
         },
@@ -147,7 +147,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
 
             node.append("text")
                 .attr("dy", "0.5em")
-                .attr("x", d => d.children ? -6 : 6)
+                .attr("x", -6)
                 .attr("text-anchor", 'start')
                 .attr("paint-order", "stroke")
                 .attr("stroke", halo)
@@ -164,14 +164,14 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 )
             ])
                 .pipe(
-                    map(([dimensions, props, data]) => {
+                    map(([[_, w], props, data]) => {
                         // prepare data
                         const root = hierarchy(data);
                         root.sort((a,b) => a.data.name.localeCompare(b.data.name));
 
                         // calculate viewbox
-                        const dx = 30;
-                        const dy = dimensions[1] / (root.height + props.padding);
+                        const dx = 50; // TODO: move into props
+                        const dy = w / (root.height + props.padding);
                         tree<HierarchyDatum>().nodeSize([dx, dy])(root);
 
                         let x0 = Infinity;
@@ -181,7 +181,22 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                             if (d.x < x0) x0 = d.x;
                         });
                         const h = x1 - x0 + dx * 2;
-                        const viewbox = [-dy * props.padding / 2, x0 - dx, dimensions[1], h];
+                        const viewbox = [-dy * props.padding / 2, x0 - dx, w, h];
+
+                        // setup zoom (it's not great)
+                        // select(this._svg).call(
+                        //     zoom()
+                        //         .on('zoom', (e) => {
+                        //             select(this._svg).attr('transform', e.transform);
+                        //         })
+                        //         .scaleExtent([1, 2])
+                        //         .translateExtent([
+                        //             viewbox.slice(0, 2) as [number, number],
+                        //             [w, h]
+                        //         ])
+                        // );
+
+                        // return
                         return [props, viewbox, root]
                     })
                 )

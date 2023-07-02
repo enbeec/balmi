@@ -27,14 +27,11 @@ function execCommand(s: string) {
 export const Chat = (): AlpineComponent => {
     const wordList: string[] = [
         'balmi',
-        'kai',
-        'val',
 
         'balmi says hello',
         'balmi is happy',
         'balmi is quiet',
-        'balmi can not read',
-        'balmi is not sad'
+        'balmi is not sad',
     ];
 
     const subscriptions: Subscription[] = [];
