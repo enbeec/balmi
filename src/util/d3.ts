@@ -2,7 +2,15 @@ import { create, curveBumpX, link, select, zoom } from 'd3';
 import { HierarchyPointNode, hierarchy, tree } from 'd3-hierarchy';
 import { TrieNode, Trie } from "./trie";
 import { type AlpineComponent } from 'alpinejs';
-import { BehaviorSubject, Observable, ObservedValueOf, Subject, combineLatest, combineLatestWith, distinctUntilChanged, map, tap } from 'rxjs';
+import { 
+    BehaviorSubject, 
+    Observable, 
+    ObservedValueOf, 
+    Subject, 
+    combineLatest, 
+    distinctUntilChanged, 
+    map 
+} from 'rxjs';
 
 interface HierarchyDatum {
     name: string;
