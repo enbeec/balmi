@@ -1,4 +1,4 @@
-import { create, curveBumpX, link, select, zoom } from 'd3';
+import { create, curveBumpX, link, select } from 'd3';
 import { HierarchyPointNode, hierarchy, tree } from 'd3-hierarchy';
 import { TrieNode, Trie } from "./trie";
 import { type AlpineComponent } from 'alpinejs';
@@ -43,7 +43,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         ),
     );
 
-    // TODO: adjust with breakpoint
+    // TODO: adjust with breakpoint (xl needs a big boost)
     const svgProps$ = new BehaviorSubject({
         curve: curveBumpX,
 
@@ -102,7 +102,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         drawSVG(
             {
                 strokeLinecap, strokeOpacity, strokeWidth, strokeLinejoin,
-                fill, stroke, r, curve,
+                stroke, r, curve,
                 halo, haloWidth,
 
             }: SVGProps,
