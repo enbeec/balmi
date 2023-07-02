@@ -27,8 +27,6 @@ function execCommand(s: string) {
 export const Chat = (): AlpineComponent => {
     const wordList: string[] = [
         'balmi',
-        'balmain',
-        'boop',
         'kai',
         'val',
 

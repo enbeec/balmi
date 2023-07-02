@@ -67,13 +67,13 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             const svg = create('svg')
                 .attr('font-family', 'sans-serif')
                 .attr('font-size', 16)
-                .attr('style', `height: 100%; width: 100%; height: intrinsic;`)
+                .attr('style', `min-height: 100%; width: 100%; max-width: 100%;`)
                 .attr('id', this._svgId)
-                .attr('height', height).attr('width', width);
+                .attr('height', height).attr('width', width)
+                .call(zoom);
 
             this.$el.replaceChildren(svg.node() as Node);
         },
-        // @ts-ignore
         drawSVG([h,w]: [number, number], data: HierarchyDatum) {
             // see: https://observablehq.com/@d3/tree
             const curve = curveBumpX;
@@ -99,7 +99,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             // START layout calulation
             // TODO: make this reusable and idempotent (for the resize handler)
             const dx = 30;
-            const dy = width / (root.height + padding);
+            const dy = w / (root.height + padding);
             tree<HierarchyDatum>().nodeSize([dx, dy])(root);
 
             let x0 = Infinity;
@@ -109,10 +109,12 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 if (d.x < x0) x0 = d.x;
             });
 
-            const viewbox = [-dy * padding / 2, x0 - dx, width, height];
-            // END layout calculation
+            const viewbox = [-dy * padding / 2, x0 - dx, w, h];
+            // END layout calculatio
 
-            const svg = select(this._svg).attr("viewBox", viewbox);
+            const svg = select(this._svg).attr("viewBox", viewbox)
+
+            svg.selectAll('*').remove();
 
             // TODO: rewrite this to be idempotent
             svg.append("g")
@@ -137,7 +139,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
 
             node.append("circle")
                 .attr("fill", d => d.children ? stroke : fill)
-                .attr("r", r);
+                .attr("r", d => d.data.name === ' ' || !d.depth ? 5 : r);
 
             node.append("text")
                 .attr("dy", "0.5em")
