@@ -49,8 +49,8 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
 
         fill: '#999',
 
-        halo: '#fff',
-        haloWidth: 1,
+        halo: '#345',
+        haloWidth: 2,
 
         stroke: '#555',
         strokeWidth: 3,
@@ -137,7 +137,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 .attr("transform", (d) => `translate(${d.y},${d.x})`);
 
             node.append("circle")
-                .attr("fill", d => d.children ? stroke : fill)
+                .attr("fill", stroke)
                 .attr("r", d => !d.depth
                     ? 1
                     : d.data.name === ' '
@@ -148,8 +148,10 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
             node.append("text")
                 .attr("dy", "0.5em")
                 .attr("x", -6)
+                .attr('y', -2)
                 .attr("text-anchor", 'start')
                 .attr("paint-order", "stroke")
+                .style('fill', 'lightblue')
                 .attr("stroke", halo)
                 .attr("stroke-width", haloWidth)
                 .text((_, i) => label[i]);
