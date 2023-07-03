@@ -5,7 +5,6 @@ import { type LayoutContext, useLayoutObserver, RectContext, useResizeObserver }
 import { Observable, type Subscription } from "rxjs";
 import { FullscreenServerEvent, fullscreenServer } from "./fullscreen";
 
-
 export const Layout = (
     fullscreenEvents$: Observable<FullscreenServerEvent>
 ): AlpineComponent => {

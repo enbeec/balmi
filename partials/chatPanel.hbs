@@ -4,36 +4,36 @@
     :class="chatPanel + chatPanelPosition"
     class="relative overflow-y-auto border border-amber-200 bg-green-300 flex flex-col-reverse shadow-amber-950"
     @click.stop.prevent="$dispatch('panelfocus', 'chat')"
-    x-effect="$store.rootTrie$ = rootTrie$"
 >
-<input
-    tabindex="0"
-    class="mt-2 bg-green-100 slate-900 p-2 h-8"
-    x-model="chatInput"
-    x-ref="chatInputEl"
-    @keydown.esc.prevent="clearCompletions()"
-    @keydown.shift.esc="$event.target.blur()"
-    @keydown.tab.prevent="queryCompletions()"
-    @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
-/>
-<div
-    class="md:mt-2 px-2 bg-amber-100"
->
-    <template
-    x-for="(comp, idx) in completions"
-    >
-        <span
-            class="mx-2"
-            :class="{ 'text-cyan-950 underline': completionIndex === idx }"
-            x-text="comp"
-            tabindex="0"
-        ></span>
-    </template>
-</div>
-<template x-for="row in rows">
+    <input
+        tabindex="0"
+        class="mt-2 bg-green-100 slate-900 p-2 h-8"
+        x-model="chatInput"
+        x-ref="chatInputEl"
+        x-effect="$store.rootTrie$ = rootTrie$"
+        @keydown.esc.prevent="clearCompletions()"
+        @keydown.shift.esc="$event.target.blur()"
+        @keydown.tab.prevent="queryCompletions()"
+        @keydown.enter="completions.length ? commitCompletion(completionIndex) : submitChat()"
+    />
     <div
-    x-text="row.text"
-    class="px-2"
-    :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
-</template>
+        class="md:mt-2 px-2 bg-amber-100"
+    >
+        <template
+        x-for="(comp, idx) in completions"
+        >
+            <span
+                class="mx-2"
+                :class="{ 'text-cyan-950 underline': completionIndex === idx }"
+                x-text="comp"
+                tabindex="0"
+            ></span>
+        </template>
+    </div>
+    <template x-for="row in rows">
+        <div
+        x-text="row.text"
+        class="px-2"
+        :class="row.type === 'chat' ? 'text-slate-900' : 'text-slate-700'"></div>
+    </template>
 </section>

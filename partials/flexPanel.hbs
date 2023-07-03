@@ -3,9 +3,9 @@
     :class="flexPanel + flexPanelPosition + ` ${currentBreakpoint}`"
     class="relative bg-purple-300 border border-amber-200 shadow-amber-950 flex flex-col"
     @click.stop.prevent="$dispatch('panelfocus', 'flex')"
-    x-data="{ tabs: ['Autocomplete'], activeIdx: 0 }"
 >
     <div 
+        x-data="{ tabs: ['Autocomplete'], activeIdx: 0 }"
         class="w-full text-violet-100 bg-black self-end flex flex-row-reverse space-x-2 select-none px-2 py-1"
     >
         <template x-for="(tab, tabIdx) of tabs">
@@ -23,10 +23,12 @@
                 class="absolute left-2 bottom-2 z-50 hover:text-white active:text-slate-300"
                 @click="dispatch({ name: 'fullscreen:request', id: 'root-trie' })"
             >
+                <!-- TODO: make this minimize on fullscreen begin -->
                 <i 
                     data-feather="maximize-2"
                 ></i>
             </button>
+            <!-- TODO: teleport the diagram into canvas on fullscreen begin -->
             <template x-if="rectHeight > 0 && rectWidth > 0">
                 <div 
                     id="root-trie"

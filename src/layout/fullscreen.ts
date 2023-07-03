@@ -1,7 +1,7 @@
 import { AlpineMagics } from "alpinejs";
 import { LayoutContext } from "./layoutObserver";
 import { EVENT_KEY, Event } from "../events";
-import { Observable, tap } from "rxjs";
+import { Observable, Subscription, tap } from "rxjs";
 import { split } from "../util";
 
 /* Fullscreen Events
@@ -53,6 +53,23 @@ export const fullscreenServer = (
 ) => {
     let current = '';
 
+    const chatPanel = document.querySelector('#chat-panel') as HTMLElement;
+    const ctrlPanel = document.querySelector('#ctrl-panel') as HTMLElement;
+    const flexPanel = document.querySelector('#flex-panel') as HTMLElement;
+    console.log({flexPanel, ctrlPanel, chatPanel})
+
+    function scatter() {
+        flexPanel.style.transform = `translateX(${flexPanel.offsetWidth - 12}px)`;
+        chatPanel.style.transform = `translateY(-${chatPanel.offsetHeight - 12}px)`;
+    }
+
+    function gather() {
+        flexPanel.style.transform = '';
+        chatPanel.style.transform = '';
+    }
+
+    let breakpointSubscription: Subscription | null = null;
+
     /** dispatches deny or begin (and stores id) */
     function onRequest(id: string) {
         if (current) {
@@ -63,11 +80,12 @@ export const fullscreenServer = (
             return
         }
         current = id;
-        // TODO: move panels according to breakpoint
+        scatter();
         ctx.$dispatch(EVENT_KEY, {
             name: 'fullscreen:begin',
             el: { ...ctx.$refs.canvas },
         });
+        // TODO: subscribe to breakpoint
     };
 
     /** throws or unsets current */
@@ -75,6 +93,8 @@ export const fullscreenServer = (
         if (!current || id !== current)
             throw new Error(`${id} fullscreen:end recieved but current fullscreen is ${current}`);
         current = '';
+        gather();
+        // TODO: unsubscribe to breakpoint
     };
 
     return event$.pipe(
