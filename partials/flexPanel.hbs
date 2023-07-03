@@ -19,13 +19,22 @@
     <template x-if="!!$store.rootTrie$">
         <div class="absolute inset-0 top-10 border border-red-600" x-data="sizer"
         >
+            <button 
+                class="absolute left-2 bottom-2 z-50 hover:text-white active:text-slate-300"
+                @click="dispatch({ name: 'fullscreen:request', id: 'root-trie' })"
+            >
+                <i 
+                    data-feather="maximize-2"
+                ></i>
+            </button>
             <template x-if="rectHeight > 0 && rectWidth > 0">
                 <div 
                     id="root-trie"
                     style="width: 100%; height: 100%;"
                     x-data="d3tree($store.rootTrie$, { name: 'trie-diagram', height: rectHeight, width: rectWidth })"
                     x-effect="resize(rectWidth, rectHeight, currentBreakpoint)"
-                ></div>
+                >
+                </div>
             </template>
         </div>
     </template>

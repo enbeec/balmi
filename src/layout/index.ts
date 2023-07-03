@@ -2,12 +2,16 @@ import { type AlpineComponent } from "alpinejs";
 import { type Simplify } from 'type-fest';
 import { type PanelContext, type PanelSelector, useStackedPanels } from "./stackedPanels";
 import { type LayoutContext, useLayoutObserver, RectContext, useResizeObserver } from "./layoutObserver";
-import { type Subscription } from "rxjs";
+import { Observable, type Subscription } from "rxjs";
+import { FullscreenServerEvent, fullscreenServer } from "./fullscreen";
 
-export const Layout = (): AlpineComponent => {
+
+export const Layout = (
+    fullscreenEvents$: Observable<FullscreenServerEvent>
+): AlpineComponent => {
     const { focusPanel, updatePanelPosition } = useStackedPanels();
     const { subLayout } = useLayoutObserver();
-
+    
     return {
         canvas: [
             'min-h-[680px]',
@@ -55,13 +59,14 @@ export const Layout = (): AlpineComponent => {
         isXl: false,
         currentBreakpoint: 'sm',
         init() {
-            // write initial panel positions
             updatePanelPosition(this);
+            fullscreenServer(this, fullscreenEvents$).subscribe();
             // set up observer and store cleanup function
+            // TODO: nuke this pattern from orbit
             this.destroy = subLayout(this);
         },
         destroy() {},
-    } satisfies Simplify<LayoutContext & PanelContext & AlpineComponent>;
+    } satisfies AlpineComponent<LayoutContext & PanelContext>;
 }
 
 export const Sizer = (): AlpineComponent => {

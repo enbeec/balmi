@@ -7,16 +7,20 @@
   <title>balmi say hello</title>
   <style>
     body {
-      /* hide until Tailwind is loaded */
+      /* hide until Tailwind (body.visible) is loaded */
       visibility: hidden;
     }
   </style>
 </head>
-<body class="visible">
+<body 
+  class="visible" 
+  x-data="eventBus($store.eventBus$)"
+  @balmi="eventBus$.next($event.detail)"
+>
 <div
   id="canvas"
-  x-data="layout"
-  :class="canvas"
+  x-ref="canvas"
+  x-data="layout(observe('fullscreen:request', 'fullscreen:end'))"
   class="bg-slate-300"
   @panelfocus="focusPanel($event.detail)"
   x-effect="console.debug('layout change', { currentBreakpoint, bodyWidth, bodyHeight })"

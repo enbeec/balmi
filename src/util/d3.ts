@@ -71,8 +71,8 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
         },
         xl: {
             dx: 50,
-            dyOffset: -2,
-            fontSize: 36,
+            dyOffset: 0,
+            fontSize: 32,
             r: 24,
             padding: 3,
         },
@@ -131,7 +131,7 @@ export const D3Tree = <T extends Trie>(dataSource: Observable<T>, { height, widt
                 .attr('id', this._svgId)
                 .attr('height', height).attr('width', width);
 
-            this.$el.replaceChildren(svg.node() as Node);
+            this.$el.append(svg.node() as Node);
         },
         drawSVG(
             {
