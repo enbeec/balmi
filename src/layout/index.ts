@@ -2,12 +2,9 @@ import { type AlpineComponent } from "alpinejs";
 import { type Simplify } from 'type-fest';
 import { type PanelContext, type PanelSelector, useStackedPanels } from "./stackedPanels";
 import { type LayoutContext, useLayoutObserver, RectContext, useResizeObserver } from "./layoutObserver";
-import { Observable, type Subscription } from "rxjs";
-import { FullscreenServerEvent, fullscreenServer } from "./fullscreen";
+import { type Subscription } from "rxjs";
 
-export const Layout = (
-    fullscreenEvents$: Observable<FullscreenServerEvent>
-): AlpineComponent => {
+export const Layout = (): AlpineComponent => {
     const { focusPanel, updatePanelPosition } = useStackedPanels();
     const { subLayout } = useLayoutObserver();
     
@@ -59,7 +56,6 @@ export const Layout = (
         currentBreakpoint: 'sm',
         init() {
             updatePanelPosition(this);
-            fullscreenServer(this, fullscreenEvents$).subscribe();
             // set up observer and store cleanup function
             // TODO: nuke this pattern from orbit
             this.destroy = subLayout(this);
