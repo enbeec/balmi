@@ -1,11 +1,11 @@
 <section
     id="flex-panel"
-    :class="flexPanel + flexPanelPosition + ` ${currentBreakpoint}`"
     class="relative bg-purple-300 border border-amber-200 shadow-amber-950 flex flex-col"
+    x-data="{ tabs: ['Autocomplete', 'Avatar'], activeIdx: $persist(0) }"
+    :class="flexPanel + flexPanelPosition + ` ${currentBreakpoint}`"
     @click.stop.prevent="$dispatch('panelfocus', 'flex')"
 >
     <div 
-        x-data="{ tabs: ['Autocomplete'], activeIdx: 0 }"
         class="w-full text-violet-100 bg-black self-end flex flex-row-reverse space-x-2 select-none px-2 py-1"
     >
         <template x-for="(tab, tabIdx) of tabs">
@@ -13,21 +13,35 @@
                 x-text="tab" 
                 :class="activeIdx === tabIdx ? 'font-bold underline bg-gray-700 rounded-sm' : 'cursor-pointer'"
                 class="px-2 py-1" 
+                @click="activeIdx = tabIdx"
             ></div>
         </template>
     </div>
-    <template x-if="!!$store.rootTrie$">
-        <div class="absolute inset-0 top-10 border border-red-600" x-data="sizer"
+    <template x-if="activeIdx === 0">
+        <template x-if="!!$store.rootTrie$">
+            <div class="absolute inset-0 top-10" x-data="sizer">
+                <template x-if="rectHeight > 0 && rectWidth > 0">
+                    <div 
+                        id="root-trie"
+                        style="width: 100%; height: 100%;"
+                        x-data="d3tree($store.rootTrie$, { height: rectHeight, width: rectWidth })"
+                        x-effect="resize(rectWidth, rectHeight, currentBreakpoint)"
+                    >
+                    </div>
+                </template>
+            </div>
+        </template>
+    </template>
+    <template x-if="activeIdx === 1">
+        <div 
+            class="absolute inset-0 top-10"
+            x-data="sizer"
         >
-            <template x-if="rectHeight > 0 && rectWidth > 0">
-                <div 
-                    id="root-trie"
-                    style="width: 100%; height: 100%;"
-                    x-data="d3tree($store.rootTrie$, { name: 'trie-diagram', height: rectHeight, width: rectWidth })"
-                    x-effect="resize(rectWidth, rectHeight, currentBreakpoint)"
-                >
-                </div>
-            </template>
+            <div 
+                style="width: 100%; height: 100%;"
+                x-data="avatarEditor({ height: rectHeight, width: rectWidth })"
+                x-effect="resize(rectWidth, rectHeight, currentBreakpoint)"
+            ></div>
         </div>
     </template>
 </section>

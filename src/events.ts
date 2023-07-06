@@ -1,6 +1,5 @@
 import { type AlpineComponent } from "alpinejs";
 import { Subject, Subscription, filter, tap } from "rxjs";
-import { FullscreenEventName } from "./layout/fullscreen";
 
 
 type AppEvent =
@@ -8,7 +7,6 @@ type AppEvent =
 
 export type EventName = 
     | AppEvent
-    | FullscreenEventName 
     | (string & {});
 
 export type Event<T> = T & {

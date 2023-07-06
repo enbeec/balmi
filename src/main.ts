@@ -1,11 +1,14 @@
 import Alpine, { type AlpineComponent } from 'alpinejs';
+// @ts-ignore
+import persist from '@alpinejs/persist';
 import './style.css'
 import { Chat } from "./chat";
 import { Layout, Sizer } from './layout';
 import { init as initFeather } from './util/feather';
-import { D3Tree } from './util/d3';
+import { D3Tree } from './components/d3TrieDiagram';
 import { EVENT_KEY, EventBus } from './events';
 import { Subject } from 'rxjs';
+import { D3AvatarEditor } from './components/d3AvatarEditor';
 
 declare global {
     interface Window {
@@ -13,6 +16,7 @@ declare global {
     }
 }
 window.Alpine = Alpine;
+Alpine.plugin(persist);
 
 initFeather(Alpine);
 
@@ -28,5 +32,7 @@ Alpine.store('eventKey', EVENT_KEY);
 
 Alpine.store('eventBus$', new Subject());
 Alpine.store('rootTrie$', '');
+
+Alpine.data('avatarEditor', D3AvatarEditor as () => AlpineComponent);
 
 Alpine.start();

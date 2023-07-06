@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@alpinejs/persist':
+    specifier: ^3.12.3
+    version: 3.12.3
   '@types/d3-hierarchy':
     specifier: ^3.1.2
     version: 3.1.2
@@ -65,6 +68,10 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
     dev: true
+
+  /@alpinejs/persist@3.12.3:
+    resolution: {integrity: sha512-TyDzwkFePki6vc+pCdxdNs0cYdBYAJ6W5szXnoQys8iUyshov/6Q9UhKxlXoCE4jvmmXvL+U4vNnnCcnmVD5dg==}
+    dev: false
 
   /@esbuild/android-arm64@0.17.19:
     resolution: {integrity: sha512-KBMWvEZooR7+kzY0BtbTQn0OAYY7CsiydT63pVEaPtVYF0hXbUaOyZog37DKxK7NF3XacBJOpYT4adIJh+avxA==}
