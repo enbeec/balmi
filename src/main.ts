@@ -8,7 +8,7 @@ import { init as initFeather } from './util/feather';
 import { D3Tree } from './components/d3TrieDiagram';
 import { EVENT_KEY, EventBus } from './events';
 import { Subject } from 'rxjs';
-import { D3AvatarEditor } from './components/d3AvatarEditor';
+import { AvatarEditor } from './components/AvatarEditor';
 
 declare global {
     interface Window {
@@ -33,6 +33,6 @@ Alpine.store('eventKey', EVENT_KEY);
 Alpine.store('eventBus$', new Subject());
 Alpine.store('rootTrie$', '');
 
-Alpine.data('avatarEditor', D3AvatarEditor as () => AlpineComponent);
+Alpine.data('avatarEditor', AvatarEditor as () => AlpineComponent);
 
 Alpine.start();
