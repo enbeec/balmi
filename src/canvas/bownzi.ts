@@ -5,7 +5,7 @@ import bownziFg from '../../public/sprites/bownzi_fg.png';
 
 export class Bownzi extends Sprite {
     /** static "constructor" so we don't have to override Sprite.constructor */
-    static fromSource(): Bownzi {
+    static newSprite(): Bownzi {
         // see piskel source file
         const h = 16, w = 16, length = 14;
         const SHEET_H = h, SHEET_W = w * length;
