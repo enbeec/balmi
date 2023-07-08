@@ -41,7 +41,9 @@
                 style="width: 100%; height: 100%;"
                 x-data="avatarEditor({ height: rectHeight, width: rectWidth })"
                 x-effect="resize(rectWidth, rectHeight, currentBreakpoint)"
-            ></div>
+            >
+                <canvas id="avatar-editor-canvas" class="absolute inset-0 border-2"></canvas>
+            </div>
         </div>
     </template>
 </section>

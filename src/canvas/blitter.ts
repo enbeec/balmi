@@ -42,6 +42,7 @@ export function makeBlitter(
     }
 
     return (dest: CanvasRenderingContext2D, [destX, destY]: Coords) => {
+        debugger
         dest.drawImage(
             source,
             sourceX, sourceY, width, height,

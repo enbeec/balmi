@@ -23,7 +23,7 @@
   x-data="layout(observe('fullscreen:request', 'fullscreen:end'))"
   class="bg-slate-300"
   @panelfocus="focusPanel($event.detail)"
-  x-effect="console.debug('layout change', { currentBreakpoint, bodyWidth, bodyHeight })"
+  x-effect="console.info('layout change', { currentBreakpoint, bodyWidth, bodyHeight })"
 >
   <div
     class="h-screen p-1 pb-6 md:p-6 md:pb-12 lg:p-12 lg:pb-18"

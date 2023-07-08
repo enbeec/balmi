@@ -42,7 +42,7 @@ export const EventBus = (eventBus$: Subject<Event<unknown>>): AlpineComponent =>
                         console.error(err.message);
                     }
                 }))
-                .subscribe(console.debug);
+                .subscribe(console.info);
         },
         destroy() {
             this.dispatch({ name: 'app:shutdown', data: undefined });
