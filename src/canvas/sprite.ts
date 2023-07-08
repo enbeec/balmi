@@ -1,8 +1,8 @@
 import { Blittable, Frames, makeBlitter } from "./blitter";
 
 export class Sprite implements Blittable {
-    private source: OffscreenCanvas; 
-    private frames: Frames;
+    source: OffscreenCanvas; 
+    frames: Frames;
     constructor(source: OffscreenCanvas, frames: Frames) {
         this.source = source;
         this.frames = frames;

@@ -1,7 +1,11 @@
 /** Utilities for rendering to a canvas from an offscreen spritesheet. */
 
-/** [height, width] */
+export enum Dimension { width, height };
+
+/** [width, height] */
 export type Dimensions = [number, number];
+
+export enum Coord { x, y };
 
 /** [x, y] */
 export type Coords = [number, number];
