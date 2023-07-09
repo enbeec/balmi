@@ -41,8 +41,17 @@ export function makeBlitter(
         }
     }
 
+    // debug offscreen source
+    source.convertToBlob().then(blob => {
+        let url = URL.createObjectURL(blob);
+        let container = document.querySelector('#debug-canvas');
+        let img = document.createElement('img');
+        img.src = url;
+        container?.appendChild(img);
+    })
+
     return (dest: CanvasRenderingContext2D, [destX, destY]: Coords) => {
-        debugger
+        dest.clearRect(destX, destY, width, height);
         dest.drawImage(
             source,
             sourceX, sourceY, width, height,
