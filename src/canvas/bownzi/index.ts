@@ -48,15 +48,6 @@ export class Bownzi extends Sprite {
                 easelCTX.drawImage(bgImage, ...layerOffset(Layer.bg));
                 easelCTX.drawImage(fgImage, ...layerOffset(Layer.fg));
                 this.ready = true;
-
-                // debug offscreen source
-                this.easel.convertToBlob().then(blob => {
-                    let url = URL.createObjectURL(blob);
-                    let container = document.querySelector('#debug-canvas')!;
-                    let img = document.createElement('img');
-                    img.src = url;
-                    container.appendChild(img);
-                })
             }
         );
     }
@@ -103,7 +94,7 @@ export class Bownzi extends Sprite {
         sourceCTX.drawImage(temp, 0, 0);
     }
 
-    // ===== sprite storage ======
+    // ===== sprite sheet storage ======
     private static easel = new OffscreenCanvas(
         BOWNZI_SHEET_DIMENSIONS[Dimension.width],
         BOWNZI_SHEET_DIMENSIONS[Dimension.height] * Layer.NUM_LAYERS,

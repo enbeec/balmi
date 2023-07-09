@@ -2,6 +2,7 @@ import { AlpineComponent } from "alpinejs";
 import { BreakpointSelector } from "../layout/tailwind.helpers";
 import { hexColorRegexp } from "../util";
 import { Bownzi } from "../canvas/bownzi";
+import { Coord, Coords } from "../canvas/blitter";
 
 export const AvatarEditor = (): AlpineComponent => {
     return {
@@ -17,27 +18,69 @@ export const AvatarEditor = (): AlpineComponent => {
         },
 
         async init() {
+            // preloads the offscreen canvas with sprite data
             await this.setup();
 
-            // TEST DRAW
-            const ctx = (
-                this.$el.querySelector('#avatar-editor-canvas') as HTMLCanvasElement
-            ).getContext('2d')!;
-            const b = Bownzi.newSprite();
-            const renderer = b.blitter();
-            this.render = () => renderer(ctx, [12, 12]);
-            this.render();
-            // END TEST DRAW
+            const canvas = this.$el.querySelector('#avatar-editor-canvas') as HTMLCanvasElement;
+            const { height, width } = canvas;
+
+            const ctx = canvas.getContext('2d')!;
+
+            // Bownzi extends a base sprite class and has a static "constructor" called newSprite
+            this.sprite = Bownzi.newSprite();
+
+            // creates the drawing function that takes a context and coordinate pair
+            const render = this.sprite.blitter();
+
+            let delay_ms = 60; let lastTime = 0;
+            let coords: Coords = [0, 0]; // Start at the top left corner of the canvas
+
+            const updateCoords = (coords: Coords): Coords => {
+                let newX = Math.floor(coords[Coord.x] + Math.random() * 4 - 2);
+                let newY = Math.floor(coords[Coord.y] + Math.random() * 4 - 2);
+            
+                // Check if the new coordinates are within the bounds of the canvas
+                if (newX < 0) newX = 0;
+                if (newY < 0) newY = 0;
+                if (newX > width) newX = width;
+                if (newY > height) newY = height;
+            
+                return [newX, newY];
+            };
+
+            let frameIndex = 0;
+
+            const animate = (time = 0) => {
+                if (lastTime === 0) {
+                    lastTime = time;
+                }
+
+                const deltaTime = time - lastTime;
+
+                if (deltaTime >= delay_ms) {
+                    frameIndex = render(ctx, coords);
+                    lastTime = time;
+                }
+
+                // Add a small random value to delay_ms to make the animation feel more organic
+                delay_ms = 40 + Math.random() * 30; // Vary delay_ms within a range of 40 to 70 ms
+
+                // on the frame where it bounces, move
+                if (frameIndex === 11) coords = updateCoords(coords);
+
+                requestAnimationFrame(animate);
+            }
+            render(ctx, coords);
+            animate();
         },
-        render() {},
         sprite: null as unknown as Bownzi,
-        canvas: null as unknown as CanvasRenderingContext2D,
+        getContext() { return null as unknown as CanvasRenderingContext2D },
         async setup() {
             await Bownzi.init();
+            this.sprite = Bownzi.newSprite();
         },
     } satisfies AlpineComponent<{
         sprite: Bownzi;
-        canvas: CanvasRenderingContext2D;
-        render(): void;
+        getContext(): CanvasRenderingContext2D
     }>
 }
