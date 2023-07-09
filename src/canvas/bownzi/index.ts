@@ -50,13 +50,13 @@ export class Bownzi extends Sprite {
                 this.ready = true;
 
                 // debug offscreen source
-                this.easel.convertToBlob().then(blob => {
-                    let url = URL.createObjectURL(blob);
-                    let container = document.querySelector('#debug-canvas')!;
-                    let img = document.createElement('img');
-                    img.src = url;
-                    container.appendChild(img);
-                })
+                // this.easel.convertToBlob().then(blob => {
+                //     let url = URL.createObjectURL(blob);
+                //     let container = document.querySelector('#debug-canvas')!;
+                //     let img = document.createElement('img');
+                //     img.src = url;
+                //     container.appendChild(img);
+                // });
             }
         );
     }

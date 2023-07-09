@@ -41,23 +41,24 @@ export function makeBlitter(
         }
     }
 
-    // debug offscreen source
-    source.convertToBlob().then(blob => {
-        let url = URL.createObjectURL(blob);
-        let container = document.querySelector('#debug-canvas');
-        let img = document.createElement('img');
-        img.src = url;
-        container?.appendChild(img);
-    })
+    let lastX: number, lastY: number;
 
     return (dest: CanvasRenderingContext2D, [destX, destY]: Coords) => {
-        dest.clearRect(destX, destY, width, height);
+        if (typeof lastX !== 'number') {
+            lastX = destX;
+            lastY = destY;
+        }
+
+        dest.clearRect(lastX, lastY, width, height);
         dest.drawImage(
             source,
             sourceX, sourceY, width, height,
             destX, destY, width, height,
         );
+        lastX = destX; 
+        lastY = destY;
         advance();
+        return i;
     };
 }
 
