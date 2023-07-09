@@ -52,13 +52,9 @@ export const AvatarEditor = (): AlpineComponent => {
             let delay_ms = 40; let lastTime = 0;
 
             const animate = (time = 0) => {
-                if (lastTime === 0) {
-                    lastTime = time;
-                }
+                if (lastTime === 0) lastTime = time;
 
-                const deltaTime = time - lastTime;
-
-                if (deltaTime >= delay_ms) {
+                if (time - lastTime >= delay_ms) {
                     // render
                     frameIndex = render(ctx, coords);
                     
@@ -74,7 +70,11 @@ export const AvatarEditor = (): AlpineComponent => {
 
                 requestAnimationFrame(animate);
             }
+
+            // render first frame
             render(ctx, coords);
+
+            // start loop (second frame will render after delay_ms)
             animate();
         },
         sprite: null as unknown as Bownzi,
