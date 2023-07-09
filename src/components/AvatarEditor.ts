@@ -25,6 +25,7 @@ export const AvatarEditor = (): AlpineComponent => {
             const { height, width } = canvas;
 
             const ctx = canvas.getContext('2d')!;
+            ctx.imageSmoothingEnabled = false;
 
             // Bownzi extends a base sprite class and has a static "constructor" called newSprite
             this.sprite = Bownzi.newSprite();
@@ -32,12 +33,11 @@ export const AvatarEditor = (): AlpineComponent => {
             // creates the drawing function that takes a context and coordinate pair
             const render = this.sprite.blitter();
 
-            let delay_ms = 60; let lastTime = 0;
             let coords: Coords = [0, 0]; // Start at the top left corner of the canvas
 
             const updateCoords = (coords: Coords): Coords => {
-                let newX = Math.floor(coords[Coord.x] + Math.random() * 4 - 2);
-                let newY = Math.floor(coords[Coord.y] + Math.random() * 4 - 2);
+                let newX = Math.floor(coords[Coord.x] + Math.random() * 6 - 3);
+                let newY = Math.floor(coords[Coord.y] + Math.random() * 6 - 3);
             
                 // Check if the new coordinates are within the bounds of the canvas
                 if (newX < 0) newX = 0;
@@ -49,6 +49,7 @@ export const AvatarEditor = (): AlpineComponent => {
             };
 
             let frameIndex = 0;
+            let delay_ms = 40; let lastTime = 0;
 
             const animate = (time = 0) => {
                 if (lastTime === 0) {
@@ -58,15 +59,18 @@ export const AvatarEditor = (): AlpineComponent => {
                 const deltaTime = time - lastTime;
 
                 if (deltaTime >= delay_ms) {
+                    // render
                     frameIndex = render(ctx, coords);
+                    
+                    // update time
                     lastTime = time;
+
+                    // add a small random value to delay_ms to make the animation feel more organic
+                    delay_ms = 40 + Math.random() * 15; // Vary delay_ms within a range of 40 to 70 ms
+
+                    // on the frame where it bounces, move
+                    if (frameIndex === 11) coords = updateCoords(coords);
                 }
-
-                // Add a small random value to delay_ms to make the animation feel more organic
-                delay_ms = 40 + Math.random() * 30; // Vary delay_ms within a range of 40 to 70 ms
-
-                // on the frame where it bounces, move
-                if (frameIndex === 11) coords = updateCoords(coords);
 
                 requestAnimationFrame(animate);
             }
